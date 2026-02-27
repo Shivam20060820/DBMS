@@ -1,0 +1,192 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\shiva> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use company;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| dept              |
+| emp               |
+| infodbms          |
++-------------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from emp
+    -> ;
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7499 | Allen | Salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7777 | John  | Manager  | 7776 | 1982-08-20 | 3840 |  200 |     10 |
++-------+-------+----------+------+------------+------+------+--------+
+2 rows in set (0.02 sec)
+
+mysql> select ename from emp where ename like "A%" or ename like "%a";
++-------+
+| ename |
++-------+
+| Allen |
++-------+
+1 row in set (0.00 sec)
+
+mysql> -- set 4)
+mysql> select ename from emp where year(hiredate)<1980;
+Empty set (0.00 sec)
+
+mysql> select ename from emp where year(hiredate)>1980;
++-------+
+| ename |
++-------+
+| Allen |
+| John  |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from emp order by sal asc;
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7499 | Allen | Salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7777 | John  | Manager  | 7776 | 1982-08-20 | 3840 |  200 |     10 |
++-------+-------+----------+------+------------+------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> -- 3)
+mysql> select ename from emp where sal>(select sal from emp where ename="Allen");
++-------+
+| ename |
++-------+
+| John  |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select ename,sal + sal*0.1 as inc_salary where empno=7499;
+ERROR 1054 (42S22): Unknown column 'ename' in 'field list'
+mysql> select ename,sal + sal*0.1 as inc_salary from emp where empno=7499;
++-------+------------+
+| ename | inc_salary |
++-------+------------+
+| Allen |     1760.0 |
++-------+------------+
+1 row in set (0.00 sec)
+
+mysql> select ename,sal + sal*0.1 as inc_salary from emp where empno=7499;
++-------+------------+
+| ename | inc_salary |
++-------+------------+
+| Allen |     1760.0 |
++-------+------------+
+1 row in set (0.00 sec)
+
+mysql> select ename from emp where salary in between 10000 and 25000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'between 10000 and 25000' at line 1
+mysql> select ename from emp where salary in between(10000 and 25000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'between(10000 and 25000)' at line 1
+mysql> select ename from emp where salary between 10000 and 25000;
+ERROR 1054 (42S22): Unknown column 'salary' in 'where clause'
+mysql> select ename from emp where sal between 10000 and 25000;
+Empty set (0.00 sec)
+
+mysql> -- 6)
+mysql> select ename form emp where comm=NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'emp where comm=NULL' at line 1
+mysql> select ename from emp where comm=NULL;
+Empty set (0.00 sec)
+
+mysql> -- 7)
+mysql> select ename,sal + sal*0.1 as inc_salary where job="Clerk";
+ERROR 1054 (42S22): Unknown column 'ename' in 'field list'
+mysql> select ename,sal + sal*0.1 as inc_salary from emp where job="Clerk";
+Empty set (0.00 sec)
+
+mysql> select * from emp;
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7499 | Allen | Salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7777 | John  | Manager  | 7776 | 1982-08-20 | 3840 |  200 |     10 |
++-------+-------+----------+------+------------+------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> -- 8)
+mysql> select max(sal) as sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job=(select distinct job from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job=(select di' at line 1
+mysql> select max(sal) as sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job=(select distinct job from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job=(select di' at line 1
+mysql> select max(sal) as sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job in(select distinct job from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job in(select ' at line 1
+mysql> select max(sal) as sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job in all(select distinct job from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp where job in all(sel' at line 1
+mysql> select max(sal) as sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp group by job;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sum(sal) as total_sal ,max_Sal,min(sal) as min_sal from emp group by job' at line 1
+mysql> select sum(sal) as total_sal,max(sal) as max_Sal,min(sal) as min_sal from emp group by job;
++-----------+---------+---------+
+| total_sal | max_Sal | min_sal |
++-----------+---------+---------+
+|      1600 |    1600 |    1600 |
+|      3840 |    3840 |    3840 |
++-----------+---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select ename,job,sum(sal) as total_sal,max(sal) as max_Sal,min(sal) as min_sal from emp group by job;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.emp.ename' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select ename,sum(sal) as total_sal,max(sal) as max_Sal,min(sal) as min_sal from emp group by job;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.emp.ename' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select job,sum(sal) as total_sal,max(sal) as max_Sal,min(sal) as min_sal from emp group by job;
++----------+-----------+---------+---------+
+| job      | total_sal | max_Sal | min_sal |
++----------+-----------+---------+---------+
+| Salesman |      1600 |    1600 |    1600 |
+| Manager  |      3840 |    3840 |    3840 |
++----------+-----------+---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> -- 9)
+mysql> delete from emp where name like "P%";
+ERROR 1054 (42S22): Unknown column 'name' in 'where clause'
+mysql> delete from emp where ename like "P%";
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from emp;
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7499 | Allen | Salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7777 | John  | Manager  | 7776 | 1982-08-20 | 3840 |  200 |     10 |
++-------+-------+----------+------+------------+------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> -- 10)
+mysql> select ename from emp where ename="Clerk" and comm>500;
+Empty set (0.00 sec)
+
+mysql> select ename from emp where job="Clerk" and comm>500;
+Empty set (0.00 sec)
+
+mysql> select ename from emp where deptno in(20,30,40);
++-------+
+| ename |
++-------+
+| Allen |
++-------+
+1 row in set (0.00 sec)
+
+mysql>

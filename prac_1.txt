@@ -1,0 +1,545 @@
+Microsoft Windows [Version 10.0.26200.7623]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\shiva>mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass2               |
+| emp_info_f2_ass2   |
+| hotel_info_f2_ass2 |
+| information_schema |
+| mit                |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.01 sec)
+
+mysql> create database prac_1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use prac_1;
+Database changed
+mysql> create table stud(prn int,name varchar(20)) values(1,"Shivam"), (2,"Ishaan");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(1,"Shivam"), (2,"Ishaan")' at line 1
+mysql> create table stud(prn int,name varchar(20)) in values(1,"Shivam"), (2,"Ishaan");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in values(1,"Shivam"), (2,"Ishaan")' at line 1
+mysql> create table stud(prn int,name varchar(20)) insert values(1,"Shivam"), (2,"Ishaan");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'insert values(1,"Shivam"), (2,"Ishaan")' at line 1
+mysql> create table stud(prn int,name varchar(20)); insert into table stud values(1,"Shivam"), (2,"Ishaan");
+Query OK, 0 rows affected (0.04 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table stud values(1,"Shivam"), (2,"Ishaan")' at line 1
+mysql> show tables;
++------------------+
+| Tables_in_prac_1 |
++------------------+
+| stud             |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> desc stud;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| prn   | int         | YES  |     | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> select * from stud;
+Empty set (0.01 sec)
+
+mysql> insert into stud values(1,"Shivam"),(2,"Ishaan");
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> create table addr;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> create table addr(city varchar(20),pincode int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into addr)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> insert into addr values("Pune",411046),("Pune",411038);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> alter table city add column prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn)' at line 1
+mysql> alter table stud modify prn int primary key;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table city add column prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn)' at line 1
+mysql> alter table city add column prn int;
+ERROR 1146 (42S02): Table 'prac_1.city' doesn't exist
+mysql> alter table addr add column prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn)' at line 1
+mysql> alter table addr modify column prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn)' at line 1
+mysql> alter table addr add column prn int;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table addr prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prn int foreign key(prn) references stud(prn)' at line 1
+mysql> alter table addr prn int add constraint foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prn int add constraint foreign key(prn) references stud(prn)' at line 1
+mysql> alter table addr add constraint prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int foreign key(prn) references stud(prn)' at line 1
+mysql> alter table addr add constraint fk_prn foreign key(prn) references stud(prn);
+Query OK, 2 rows affected (0.09 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| prn   | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc addr;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| city    | varchar(20) | YES  |     | NULL    |       |
+| pincode | int         | YES  |     | NULL    |       |
+| prn     | int         | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from stud;
++-----+--------+
+| prn | name   |
++-----+--------+
+|   1 | Shivam |
+|   2 | Ishaan |
++-----+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from addr;
++------+---------+------+
+| city | pincode | prn  |
++------+---------+------+
+| Pune |  411046 | NULL |
+| Pune |  411038 | NULL |
++------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into addr(prn) values(1),(2);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from addr;
++------+---------+------+
+| city | pincode | prn  |
++------+---------+------+
+| Pune |  411046 | NULL |
+| Pune |  411038 | NULL |
+| NULL |    NULL |    1 |
+| NULL |    NULL |    2 |
++------+---------+------+
+4 rows in set (0.00 sec)
+
+mysql> alter table addr truncate coulumn prn int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'coulumn prn int' at line 1
+mysql> alter table addr truncate prn int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prn int' at line 1
+mysql> alter table addr drop prn int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int' at line 1
+mysql> alter table addr drop index prn int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int' at line 1
+mysql> alter table addr drop column prn;
+ERROR 1828 (HY000): Cannot drop column 'prn': needed in a foreign key constraint 'fk_prn'
+mysql> insert into addr values(prn) where city="Pune";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where city="Pune"' at line 1
+mysql> insert into addr(prn) values(11) where city="Pune";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where city="Pune"' at line 1
+mysql> update addr set prn= where city="Pune";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where city="Pune"' at line 1
+mysql> drop addr;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'addr' at line 1
+mysql> drop table addr;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> alter table stud drop index prn;
+ERROR 1091 (42000): Can't DROP 'prn'; check that column/key exists
+mysql> desc stud;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| prn   | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table stud drop index prn;
+ERROR 1091 (42000): Can't DROP 'prn'; check that column/key exists
+mysql> update stud set name="great" where prn="1";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from stud;
++-----+--------+
+| prn | name   |
++-----+--------+
+|   1 | great  |
+|   2 | Ishaan |
++-----+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into stud values(3,"Munni"),(4,"Harshal"),(5,"Ishita"),(6,"Aditi");
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table stud add column batch varchar(20);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update table stud set batch="Sy";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table stud set batch="Sy"' at line 1
+mysql> update table stud set batch="SY" where prn = 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table stud set batch="SY" where prn = 1' at line 1
+mysql> update stud set batch="SY" where prn = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update stud set batch="SY";
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 6  Changed: 5  Warnings: 0
+
+mysql> select *from stud;
++-----+---------+-------+
+| prn | name    | batch |
++-----+---------+-------+
+|   1 | great   | SY    |
+|   2 | Ishaan  | SY    |
+|   3 | Munni   | SY    |
+|   4 | Harshal | SY    |
+|   5 | Ishita  | SY    |
+|   6 | Aditi   | SY    |
++-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> update stud set batch="SY(cummins)" where name="aditi";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from stud;
++-----+---------+-------------+
+| prn | name    | batch       |
++-----+---------+-------------+
+|   1 | great   | SY          |
+|   2 | Ishaan  | SY          |
+|   3 | Munni   | SY          |
+|   4 | Harshal | SY          |
+|   5 | Ishita  | SY          |
+|   6 | Aditi   | SY(cummins) |
++-----+---------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select max(prn) from stud;
++----------+
+| max(prn) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select max(*) from stud;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) from stud' at line 1
+mysql> select *all max(prn) from stud;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'all max(prn) from stud' at line 1
+mysql> select avg(prn) from stud;
++----------+
+| avg(prn) |
++----------+
+|   3.5000 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from stud;
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(prn) from stud;
++------------+
+| count(prn) |
++------------+
+|          6 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select count(distinct batch) from stud;
++-----------------------+
+| count(distinct batch) |
++-----------------------+
+|                     2 |
++-----------------------+
+1 row in set (0.00 sec)
+
+mysql> update stud set name="Leg_Shivam" where prn =1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from stud;
++-----+------------+-------------+
+| prn | name       | batch       |
++-----+------------+-------------+
+|   1 | Leg_Shivam | SY          |
+|   2 | Ishaan     | SY          |
+|   3 | Munni      | SY          |
+|   4 | Harshal    | SY          |
+|   5 | Ishita     | SY          |
+|   6 | Aditi      | SY(cummins) |
++-----+------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select name from stud where prn =6;
++-------+
+| name  |
++-------+
+| Aditi |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select name from stud where prn =1;
++------------+
+| name       |
++------------+
+| Leg_Shivam |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select * from stud where prn =1;
++-----+------------+-------+
+| prn | name       | batch |
++-----+------------+-------+
+|   1 | Leg_Shivam | SY    |
++-----+------------+-------+
+1 row in set (0.00 sec)
+
+mysql> --set operations and join operations;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--set operations and join operations' at line 1
+mysql> -- set operations and join operations;
+mysql> -- nested/sub query;
+mysql> create table stud2(prn int primary key,name varchar(20),cid int, mark int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table course(cid int primary key, cname varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table stud2 add constraint fk_cid foreign key(cid) references course(cid);
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud2;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| prn   | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
+| cid   | int         | YES  | MUL | NULL    |       |
+| mark  | int         | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc course;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int         | NO   | PRI | NULL    |       |
+| cname | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert in course values(100,"dbms"),(200,"daa"),(300,ps);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in course values(100,"dbms"),(200,"daa"),(300,ps)' at line 1
+mysql> insert into course values(100,"dbms"),(200,"daa"),(300,ps);
+ERROR 1054 (42S22): Unknown column 'ps' in 'field list'
+mysql> insert into course values(100,"dbms"),(200,"daa"),(300,"ps");
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select cid from course;
++-----+
+| cid |
++-----+
+| 100 |
+| 200 |
+| 300 |
++-----+
+3 rows in set (0.00 sec)
+
+mysql> insert into stud2 values(1,"Shivam",100,95);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into stud2 values(2,"Ishaan",200,96);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into stud2 values(3,"Munni",300,85);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select name from stud2 where mark=95 and cid in(select cid from course where cname="dbms");
++--------+
+| name   |
++--------+
+| Shivam |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select name from stud2 where marks>=95 and cid in(select cid from course where cname="dbms");
+ERROR 1054 (42S22): Unknown column 'marks' in 'where clause'
+mysql> select name from stud2 where mark>=95 and cid in(select cid from course where cname="dbms");
++--------+
+| name   |
++--------+
+| Shivam |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select name from stud2 where mark>=95 and cid in(select cid from course where cname="dbms","daa");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"daa")' at line 1
+mysql> select name from stud2 where mark>=95 and cid in(select cid from course);
++--------+
+| name   |
++--------+
+| Shivam |
+| Ishaan |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select *from stud2 where mark>=95 and cid in(select cid from course where cname="dbms");
++-----+--------+------+------+
+| prn | name   | cid  | mark |
++-----+--------+------+------+
+|   1 | Shivam |  100 |   95 |
++-----+--------+------+------+
+1 row in set (0.00 sec)
+
+mysql> create user "shivam1"@"localhost" identified by "123";
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant select on prac_1.stud2 to shivam@localhost;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show grants for shivam@localhost;
++------------------------------------------------------------------------+
+| Grants for shivam@localhost                                            |
++------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `shivam`@`localhost`                             |
+| GRANT INSERT ON `hotel_info_f2_ass2`.`booking` TO `shivam`@`localhost` |
+| GRANT SELECT, DELETE, DROP ON `mit`.`book` TO `shivam`@`localhost`     |
+| GRANT SELECT ON `prac_1`.`stud2` TO `shivam`@`localhost`               |
++------------------------------------------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> create table employees(eid int primary key, ename varchar(20),salary int, role varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into employees values(1,"Shivam",40,"Dev");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employees values(2,"Ishaan",30,"Dev");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employees values(3,"Sakshi",50,"Mng");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employees values(4,"ishita",20,"Dev");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees where role ="Dev" and salary>all(select salary from employee where role ="Mng");
+ERROR 1146 (42S02): Table 'prac_1.employee' doesn't exist
+mysql> select * from employees where role ="Dev" and salary>all(select salary from employees where role ="Mng");
+Empty set (0.00 sec)
+
+mysql> insert into employees values(5,"Shivam Shirsat",60,"Dev");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees where role ="Dev" and salary>all(select salary from employees where role ="Mng");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from employees where role ="Dev" and salary>any(select salary from employees where role ="Mng");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+1 row in set (0.01 sec)
+
+mysql> insert into employees values(6,"St",70,"Mng");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees where role ="Dev" and salary>any(select salary from employees where role ="Mng");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from employees where role ="Dev" and salary>all(select salary from employees where role ="Mng");
+Empty set (0.00 sec)
+
+mysql> select * from employees where role ="Dev" and salary> avg(select salary from employees where role="Dev");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select salary from employees where role="Dev")' at line 1
+mysql> select * from employees where role ="Dev" and salary> all(select avg(salary) from employees where role="Dev");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   1 | Shivam         |     40 | Dev  |
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employees where role ="Dev" and salary> any(select avg(salary) from employees where role="Dev");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   1 | Shivam         |     40 | Dev  |
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employees where role ="Dev" and salary>(select avg(salary) from employees where role="Dev");
++-----+----------------+--------+------+
+| eid | ename          | salary | role |
++-----+----------------+--------+------+
+|   1 | Shivam         |     40 | Dev  |
+|   5 | Shivam Shirsat |     60 | Dev  |
++-----+----------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,759 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\shiva> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database ass2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> create table(prn int not null primary key, name varchar(15), panel varchar(4), course varchar(5), department varchar(10))
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(prn int not null primary key, name varchar(15), panel varchar(4), course varcha' at line 1
+mysql> create table stud(prn int not null primary key, name varchar(15), panel varchar(4), course varchar(5), department varchar(10))
+    -> ;
+ERROR 1046 (3D000): No database selected
+mysql> use databases ass2;
+ERROR 1049 (42000): Unknown database 'databases'
+mysql> use database ass2;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use ass2;
+Database changed
+mysql> create table stud(prn int not null primary key, name varchar(15), panel varchar(4), course varchar(5), department varchar(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(10) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify name varhchar(15) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varhchar(15) not null' at line 1
+mysql> alter table stud modify name varhchar(15) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varhchar(15) not null' at line 1
+mysql>
+mysql> create table stud2(prn int not null primary key, name varchar(15) not null, panel varchar(4), course varchar(5) check(course="CSE","AIDS","CSF"), department varchar(10));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',"AIDS","CSF"), department varchar(10))' at line 1
+mysql> create table stud2(prn int not null primary key, name varchar(15) not null, panel varchar(4), course varchar(5) check(in course="CSE","AIDS","CSF"),department varchar(10));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in course="CSE","AIDS","CSF"), department varchar(10))' at line 1
+mysql> create table stud2(prn int not null primary key, name varchar(15) not null, panel varchar(4), course varchar(5) check(course='CSE','AIDS','CSF'), department varchar(10));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ','AIDS','CSF'), department varchar(10))' at line 1
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(10) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql>
+mysql> alter table stud modify department varchar check(department in("CSE","AIDS","CSF"));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check(department in("CSE","AIDS","CSF"))' at line 1
+mysql> alter table stud modify check(department in("CSE","AIDS","CSF"));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check(department in("CSE","AIDS","CSF"))' at line 1
+mysql> alter table stud modify department varchar(20) check(department in("CSE","AIDS","CSF"));
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify prn int unique;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify department varchar(20) default 'SOCSE';
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud name varchar(20) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name varchar(20) not null' at line 1
+mysql> alter table stud name varchar(15) not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name varchar(15) not null' at line 1
+mysql> alter table stud name varchar(15) in not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name varchar(15) in not null' at line 1
+mysql> alter table stud name varchar(15) is not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name varchar(15) is not null' at line 1
+mysql> alter table stud modify course varchar(8) check(course in("CSE","AIDS","CSF"));
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert stud values(1,"Shivam","F","CSE");
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert stud values(1,"Shivam","F","CSE","dd");
+ERROR 3819 (HY000): Check constraint 'stud_chk_1' is violated.
+mysql> insert stud values(1,"Shivam","F","CSE","SOCSE");
+ERROR 3819 (HY000): Check constraint 'stud_chk_1' is violated.
+mysql> insert stud values(1,"Shivam","F","CSE","CSF");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> selct *from stud;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct *from stud' at line 1
+mysql> select *from stud;
++-----+--------+-------+--------+------------+
+| prn | name   | panel | course | department |
++-----+--------+-------+--------+------------+
+|   1 | Shivam | F     | CSE    | CSF        |
++-----+--------+-------+--------+------------+
+1 row in set (0.00 sec)
+
+mysql> alter table stud drop department varchar(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(20)' at line 1
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(15) | YES  |     | NULL    |       |
+| panel      | varchar(4)  | YES  |     | NULL    |       |
+| course     | varchar(8)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud drop department varchar(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(20)' at line 1
+mysql> alter table stud drop department varchar(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(20)' at line 1
+mysql> quit
+Bye
+PS C:\Users\shiva> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use ass2;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| stud           |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> drop table stud;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table stud(prn int not null unique, name varchar(20) not null, panel varchar(3), course varchar(5) check(course in 'CSE','CSF','AIDS'), department varchar(20) default 'SOCSE');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''CSE','CSF','AIDS'), department varchar(20) default 'SOCSE')' at line 1
+mysql> create table stud(prn int not null unique, name varchar(20) not null, panel varchar(3), course varchar(5) check(course in ('CSE','CSF','AIDS')), department varchar(20) default 'SOCSE');
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | NO   |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify prn int primary key;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | NO   |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table marks(prn int foreign key, subject varchar(10), teacher varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key, subject varchar(10), teacher varchar(20))' at line 1
+mysql> create table marks(prn int foreign key, subject varchar(10), teacher varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key, subject varchar(10), teacher varchar(20))' at line 1
+mysql> create table marks(prn int, subject varchar(10), teacher varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc marks;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| prn     | int         | YES  |     | NULL    |       |
+| subject | varchar(10) | YES  |     | NULL    |       |
+| teacher | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table marks prn int foreign key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prn int foreign key' at line 1
+mysql> alter table marks prn int primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prn int primary key' at line 1
+mysql> alter table marks modify prn int foreign key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key' at line 1
+mysql> alter table marks modify prn int primary key;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc marks;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| prn     | int         | NO   | PRI | NULL    |       |
+| subject | varchar(10) | YES  |     | NULL    |       |
+| teacher | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc marks;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| prn     | int         | NO   | PRI | NULL    |       |
+| subject | varchar(10) | YES  |     | NULL    |       |
+| teacher | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table marks modify foreign key(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn)' at line 1
+mysql> alter table marks modify foreign key(prn) references (prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references (prn)' at line 1
+mysql> drop marks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'marks' at line 1
+mysql> drop table marks;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| stud           |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | NO   |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table marks(prn int, attendance int, subject varchar(20), teacher varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table marks modify prn int foreign key(prn) references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn)' at line 1
+mysql> alter table marks modify prn int foreign key references stud(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key references stud(prn)' at line 1
+mysql> alter table stud modify prn int foreign key references marks(prn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key references marks(prn)' at line 1
+mysql> drop marks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'marks' at line 1
+mysql> create table marks(foreign key(prn) references stud(prn), attendance int, subject varchar(20), teacher varchar(20));
+ERROR 1050 (42S01): Table 'marks' already exists
+mysql> drop marks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'marks' at line 1
+mysql> drop table marks;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table marks(foreign key(prn) references stud(prn), attendance int, subject varchar(20), teacher varchar(20));
+ERROR 1072 (42000): Key column 'prn' doesn't exist in table
+mysql> create table marks(prn int foreign key(prn) references stud(prn), attendance int, subject varchar(20), teacher varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(prn) references stud(prn), attendance int, subject varchar(20), teac' at line 1
+mysql> create table marks(prn int, attendance int, subject varchar(20), teacher varchar(20), foreign key(prn) references stud(prn));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc marks;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | YES  | MUL | NULL    |       |
+| attendance | int         | YES  |     | NULL    |       |
+| subject    | varchar(20) | YES  |     | NULL    |       |
+| teacher    | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table dummy(prn int, name varchar(8));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> truncate table dummy;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud           |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> insert dummy values(1,"Shivam"),
+    -> (2,"Munni")y;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'y' at line 2
+mysql> insert dummy values(1,"Shivam");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud           |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> select name from dummy;
++--------+
+| name   |
++--------+
+| Shivam |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select *from dummy;
++------+--------+
+| prn  | name   |
++------+--------+
+|    1 | Shivam |
++------+--------+
+1 row in set (0.00 sec)
+
+mysql> truncate table dummy;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select *from dummy;
+Empty set (0.00 sec)
+
+mysql> alter table dummy drop name;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud           |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> desc dummy;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| prn   | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | NO   |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify name varchar(20) drop not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'drop not null' at line 1
+mysql> alter table stud modify name varchar(20) null;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify department varchar(20) not default;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'default' at line 1
+mysql> alter table stud modify department varchar(20) not default 'SOCSE';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'default 'SOCSE'' at line 1
+mysql> alter table stud modify department add constraint not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add constraint not null' at line 1
+mysql> alter table stud add constraint department not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null' at line 1
+mysql> alter table stud drop index department;
+ERROR 1091 (42000): Can't DROP 'department'; check that column/key exists
+mysql> alter table stud drop index department varchar(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(20)' at line 1
+mysql> alter table stud add unique(name)
+    -> ;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud           |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  | UNI | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud drop index name;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud add attendance varchar(2);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
+| attendance | varchar(2)  | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table stud drop attendance varchar(2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(2)' at line 1
+mysql> alter table stud drop attendance;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| panel      | varchar(3)  | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud modify prn varchar(20)
+    -> ;
+ERROR 3780 (HY000): Referencing column 'prn' and referenced column 'prn' in foreign key constraint 'marks_ibfk_1' are incompatible.
+mysql> alter table stud modify panel int;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| prn        | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| panel      | int         | YES  |     | NULL    |       |
+| course     | varchar(5)  | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | SOCSE   |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table stud rename to stud_modified
+    -> ;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud_modified  |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table stud_modified rename to stud;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_ass2 |
++----------------+
+| dummy          |
+| marks          |
+| stud           |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table stud change column course column_modified varchar(20);
+ERROR 3959 (HY000): Check constraint 'stud_chk_1' uses column 'course', hence column cannot be dropped or renamed.
+mysql> alter table stud drop index course;
+ERROR 1091 (42000): Can't DROP 'course'; check that column/key exists
+mysql> alter table stud add attendance varchar(9);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table stud change column attendance att_modified varchar(20);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc stud;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| prn          | int         | NO   | PRI | NULL    |       |
+| name         | varchar(20) | YES  |     | NULL    |       |
+| panel        | int         | YES  |     | NULL    |       |
+| course       | varchar(5)  | YES  |     | NULL    |       |
+| department   | varchar(20) | YES  |     | SOCSE   |       |
+| att_modified | varchar(20) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass2               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> create database hotel_info_F2_ass2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use hotel_info_F2_ass2;
+Database changed
+mysql> create table Hotel(Hotel_no int primary key, name varchar(20), city varchar(15));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc Hotel;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Hotel_no | int         | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| city     | varchar(15) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table Room(Room_no int not null unique, Hotel_no int, type varchar(20), Price int, foreign key(Hotel_no) references Hotel(Hotel_no));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc Room;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Room_no  | int         | NO   | PRI | NULL    |       |
+| Hotel_no | int         | YES  | MUL | NULL    |       |
+| type     | varchar(20) | YES  |     | NULL    |       |
+| Price    | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table Booking(Hotel_no int, Guest_no int, Date_from date, Date_to date, Room_no,foreign key(Hotel_no) references Hotel(Hotel_no), foreign key(Room_no) references Room(Room_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',foreign key(Hotel_no) references Hotel(Hotel_no), foreign key(Room_no) referenc' at line 1
+mysql> create table Booking(Hotel_no int, Guest_no int, Date_from date, Date_to date, Room_no int,foreign key(Hotel_no) references Hotel(Hotel_no), foreignkey(Room_no) references Room(Room_no));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc Booking;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| Hotel_no  | int  | YES  | MUL | NULL    |       |
+| Guest_no  | int  | YES  |     | NULL    |       |
+| Date_from | date | YES  |     | NULL    |       |
+| Date_to   | date | YES  |     | NULL    |       |
+| Room_no   | int  | YES  | MUL | NULL    |       |
++-----------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table Booking add unique(Guest_no);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Booking;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| Hotel_no  | int  | YES  | MUL | NULL    |       |
+| Guest_no  | int  | YES  | UNI | NULL    |       |
+| Date_from | date | YES  |     | NULL    |       |
+| Date_to   | date | YES  |     | NULL    |       |
+| Room_no   | int  | YES  | MUL | NULL    |       |
++-----------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table Guest(Guest_no int primary key,Guest_name varchar(20) not null, Guest_address varchar (40) not null);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++------------------------------+
+| Tables_in_hotel_info_f2_ass2 |
++------------------------------+
+| booking                      |
+| guest                        |
+| hotel                        |
+| room                         |
++------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> desc booking,guest,hotel,room;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',guest,hotel,room' at line 1
+mysql> desc booking;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| Hotel_no  | int  | YES  | MUL | NULL    |       |
+| Guest_no  | int  | YES  | UNI | NULL    |       |
+| Date_from | date | YES  |     | NULL    |       |
+| Date_to   | date | YES  |     | NULL    |       |
+| Room_no   | int  | YES  | MUL | NULL    |       |
++-----------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc guest
+    -> ;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| Guest_no      | int         | NO   | PRI | NULL    |       |
+| Guest_name    | varchar(20) | NO   |     | NULL    |       |
+| Guest_address | varchar(40) | NO   |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc hotel;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Hotel_no | int         | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  |     | NULL    |       |
+| city     | varchar(15) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc room;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Room_no  | int         | NO   | PRI | NULL    |       |
+| Hotel_no | int         | YES  | MUL | NULL    |       |
+| type     | varchar(20) | YES  |     | NULL    |       |
+| Price    | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql>

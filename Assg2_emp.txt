@@ -1,0 +1,249 @@
+Microsoft Windows [Version 10.0.26200.7623]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\shiva>mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass2               |
+| hotel_info_f2_ass2 |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.04 sec)
+
+mysql> create database emp_info_f2_ass2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use emp_info_f2_ass2;
+Database changed
+mysql> create table emp(e_no int primary key, ename varchar)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> create table emp(e_no int primary key, ename varchar(20), Zip int, hdate date);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc emp;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| e_no  | int         | NO   | PRI | NULL    |       |
+| ename | varchar(20) | YES  |     | NULL    |       |
+| Zip   | int         | YES  |     | NULL    |       |
+| hdate | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> create table parts(pno int primary key, pname varchar(15), qty_on_hand int, price int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc parts;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| pno         | int         | NO   | PRI | NULL    |       |
+| pname       | varchar(15) | YES  |     | NULL    |       |
+| qty_on_hand | int         | YES  |     | NULL    |       |
+| price       | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table customer(cno int primary key, cname varchar(20), street varchar(10), zip int, phone int not null);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create order(ono int primary key, cno int,receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int,receivedate date, shippeddate date, foreign k' at line 1
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| cno    | int         | NO   | PRI | NULL    |       |
+| cname  | varchar(20) | YES  |     | NULL    |       |
+| street | varchar(10) | YES  |     | NULL    |       |
+| zip    | int         | YES  |     | NULL    |       |
+| phone  | int         | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table order(ono int primary key, cno int,receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int,receivedate date, shippeddate date, foreign k' at line 1
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| cno    | int         | NO   | PRI | NULL    |       |
+| cname  | varchar(20) | YES  |     | NULL    |       |
+| street | varchar(10) | YES  |     | NULL    |       |
+| zip    | int         | YES  |     | NULL    |       |
+| phone  | int         | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table order(ono int primary key, cno int, receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int, receivedate date, shippeddate date, foreign ' at line 1
+mysql> create table order(ono int unique not null, cno int, receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int unique not null, cno int, receivedate date, shippeddate date, fore' at line 1
+mysql> create table order(ono int primary key, cno int, receivedate date, shippeddate date, foreign key(cno) references customer(cno));create table order(ono int primary key, cno int, receivedate date, shippeddate date, foreign key(cno) references customer(cno));create table order(ono int primary key, cno int,receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int, receivedate date, shippeddate date, foreign ' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int, receivedate date, shippeddate date, foreign ' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key, cno int, receivedate date, shippeddate date, foreign ' at line 1
+mysql> create table Order_cus(ono int primary key, cno int, receivedate date, shippeddate date, foreign key(cno) references customer(cno));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc Order_cus;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| ono         | int  | NO   | PRI | NULL    |       |
+| cno         | int  | YES  | MUL | NULL    |       |
+| receivedate | date | YES  |     | NULL    |       |
+| shippeddate | date | YES  |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> show tables;
++----------------------------+
+| Tables_in_emp_info_f2_ass2 |
++----------------------------+
+| customer                   |
+| emp                        |
+| order_cus                  |
+| parts                      |
++----------------------------+
+4 rows in set (0.01 sec)
+
+mysql> create table odetails(ono int, pno int,qty int, foreign key(ono) references order_cus(ono), foreign key(pno) references parts(pno));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc odetails;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| ono   | int  | YES  | MUL | NULL    |       |
+| pno   | int  | YES  | MUL | NULL    |       |
+| qty   | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table odetails pno not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'pno not null' at line 1
+mysql> alter table odetails modify pno not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null' at line 1
+mysql> alter table odetails modify qty not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null' at line 1
+mysql> alter table odetails modify pno int not null;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc odetails;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| ono   | int  | YES  | MUL | NULL    |       |
+| pno   | int  | NO   | MUL | NULL    |       |
+| qty   | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> show tables;
++----------------------------+
+| Tables_in_emp_info_f2_ass2 |
++----------------------------+
+| customer                   |
+| emp                        |
+| odetails                   |
+| order_cus                  |
+| parts                      |
++----------------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc customer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| cno    | int         | NO   | PRI | NULL    |       |
+| cname  | varchar(20) | YES  |     | NULL    |       |
+| street | varchar(10) | YES  |     | NULL    |       |
+| zip    | int         | YES  |     | NULL    |       |
+| phone  | int         | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc emp;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| e_no  | int         | NO   | PRI | NULL    |       |
+| ename | varchar(20) | YES  |     | NULL    |       |
+| Zip   | int         | YES  |     | NULL    |       |
+| hdate | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc odetails;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| ono   | int  | YES  | MUL | NULL    |       |
+| pno   | int  | NO   | MUL | NULL    |       |
+| qty   | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc order_cus;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| ono         | int  | NO   | PRI | NULL    |       |
+| cno         | int  | YES  | MUL | NULL    |       |
+| receivedate | date | YES  |     | NULL    |       |
+| shippeddate | date | YES  |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc parts;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| pno         | int         | NO   | PRI | NULL    |       |
+| pname       | varchar(15) | YES  |     | NULL    |       |
+| qty_on_hand | int         | YES  |     | NULL    |       |
+| price       | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table odetails ono int not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ono int not null' at line 1
+mysql> alter table odetails modify ono int not null;
+Query OK, 0 rows affected (0.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc odetails;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| ono   | int  | NO   | MUL | NULL    |       |
+| pno   | int  | NO   | MUL | NULL    |       |
+| qty   | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql>
