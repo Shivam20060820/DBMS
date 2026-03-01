@@ -1,0 +1,109 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| resumelens         |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.03 sec)
+
+mysql> create database library
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use library
+Database changed
+mysql> create table members(member_id int primary key, first_name varchar(15),last_name varchar(15), email vrachar(20), join_date date);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'vrachar(20), join_date date)' at line 1
+mysql> create table members(member_id int primary key, first_name varchar(15),last_name varchar(15), email varchar(20), join_date date);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc members;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| member_id  | int         | NO   | PRI | NULL    |       |
+| first_name | varchar(15) | YES  |     | NULL    |       |
+| last_name  | varchar(15) | YES  |     | NULL    |       |
+| email      | varchar(20) | YES  |     | NULL    |       |
+| join_date  | date        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> create table books(book_id int primary key, title varchar(25),author varchar(20), genre varchar(20), publish_year date);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_library |
++-------------------+
+| books             |
+| members           |
++-------------------+
+2 rows in set (0.01 sec)
+
+mysql> create table borrowings
+    -> (borrowing_id int primary key,
+    -> member_id int,
+    -> book_id int,
+    -> borrow_date date,
+    -> return_date date,
+    -> foreign key(member_id) references members(member_id),
+    -> foreign key(book_id) references books(book_id));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc borrowings
+    -> ;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| borrowing_id | int  | NO   | PRI | NULL    |       |
+| member_id    | int  | YES  | MUL | NULL    |       |
+| book_id      | int  | YES  | MUL | NULL    |       |
+| borrow_date  | date | YES  |     | NULL    |       |
+| return_date  | date | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> create table employees
+    -> (employee_id int primary key, first_name varchar(20), last_name varchar(20), hire_date date, position varchar(20));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_library |
++-------------------+
+| books             |
+| borrowings        |
+| employees         |
+| members           |
++-------------------+
+4 rows in set (0.00 sec)
+
+mysql>

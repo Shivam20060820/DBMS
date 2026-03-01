@@ -1,0 +1,438 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| resumelens         |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.01 sec)
+
+mysql> create database set_01_ass_4;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use set_01_ass_4;
+Database changed
+mysql> CREATE table project(project_id int primary key,proj_name varchar(30),chief_arch varchar(30));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc project;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| project_id | int         | NO   | PRI | NULL    |       |
+| proj_name  | varchar(30) | YES  |     | NULL    |       |
+| chief_arch | varchar(30) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> CREATE table employee(emp_id int primary key,emp_name varchar(30));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> desc employee;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| emp_id   | int         | NO   | PRI | NULL    |       |
+| emp_name | varchar(30) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> create table assigned_to(project_id int, emp_id int,foreign key(project_id) references project(project_id), foreign key(emp_id) references employee(emp_id));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc assigned_to;
++------------+------+------+-----+---------+-------+
+| Field      | Type | Null | Key | Default | Extra |
++------------+------+------+-----+---------+-------+
+| project_id | int  | YES  | MUL | NULL    |       |
+| emp_id     | int  | YES  | MUL | NULL    |       |
++------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into project (project_id, proj_name, chief_arch) values
+    -> (1, 'smart_city_system', 'arjun_mehta'),
+    -> (2, 'ai_health_monitor', 'neha_kapoor'),
+    -> (3, 'e_library_platform', 'rohit_sharma'),
+    -> (4, 'cloud_security_tool', 'ananya_verma'),
+    -> (5, 'fintech_app', 'vikram_singh');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into employee values
+    -> (101, 'rahul_patil'),
+    -> (102, 'sneha_joshi'),
+    -> (103, 'amit_desai'),
+    -> (104, 'priya_nair'),
+    -> (105, 'karan_malhotra');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into assigned_to values
+    -> (1, 101),
+    -> (2, 102),
+    -> (3, 103),
+    -> (4, 104),
+    -> (5, 105);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select e.emp_name, p.proj_name
+    -> from employee e
+    -> join assigned_to a on e.emp_id = a.emp_id
+    -> join project p on a.project_id = p.project_id;
++----------------+---------------------+
+| emp_name       | proj_name           |
++----------------+---------------------+
+| rahul_patil    | smart_city_system   |
+| sneha_joshi    | ai_health_monitor   |
+| amit_desai     | e_library_platform  |
+| priya_nair     | cloud_security_tool |
+| karan_malhotra | fintech_app         |
++----------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select count(*) as total_employees
+    -> from assigned_to a
+    -> join project p on a.project_id = p.project_id
+    -> where p.proj_name = 'c353';
++-----------------+
+| total_employees |
++-----------------+
+|               0 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> --1st query over
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--1st query over' at line 1
+mysql> -- 1 query over
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select e.emp_name, p.proj_name
+    -> from employee e
+    -> left join assigned_to a on e.emp_id = a.emp_id
+    -> left join project p on a.project_id = p.projcet_id;
+ERROR 1054 (42S22): Unknown column 'p.projcet_id' in 'on clause'
+mysql> select e.emp_name, p.proj_name
+    -> from employee e
+    -> left join assigned_to a on e.emp_id = a.emp_id
+    -> left join project p on a.project_id = p.project_id;
++----------------+---------------------+
+| emp_name       | proj_name           |
++----------------+---------------------+
+| rahul_patil    | smart_city_system   |
+| sneha_joshi    | ai_health_monitor   |
+| amit_desai     | e_library_platform  |
+| priya_nair     | cloud_security_tool |
+| karan_malhotra | fintech_app         |
++----------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> -- 2 query over
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select p.proj_name, e.emp_name
+    -> from project p
+    -> left join assigned_to a on p.project_id = a.project_id
+    -> left join employee e on a.emp_id = e.emp_id;
++---------------------+----------------+
+| proj_name           | emp_name       |
++---------------------+----------------+
+| smart_city_system   | rahul_patil    |
+| ai_health_monitor   | sneha_joshi    |
+| e_library_platform  | amit_desai     |
+| cloud_security_tool | priya_nair     |
+| fintech_app         | karan_malhotra |
++---------------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> -- 3 query over
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> create view project_employee_view as
+    -> select p.proj_name, e.emp_name
+    -> from project p
+    -> left join assigned_to a on p.project_id = a.project_id
+    -> left join employee e on a.emp_id = e.emp_id
+    ->
+    -> union
+    ->
+    -> select p.proj_name, e.emp_name
+    -> from project p
+    -> right join assigned_to a on p.project_id = a.project_id
+    -> right join employee e on a.emp_id = e.emp_id;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * project_employee_view;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'project_employee_view' at line 1
+mysql> select * from project_employee_view;
++---------------------+----------------+
+| proj_name           | emp_name       |
++---------------------+----------------+
+| smart_city_system   | rahul_patil    |
+| ai_health_monitor   | sneha_joshi    |
+| e_library_platform  | amit_desai     |
+| cloud_security_tool | priya_nair     |
+| fintech_app         | karan_malhotra |
++---------------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select
+    ->     e.emp_name,
+    ->     p.proj_name,
+    ->     case
+    ->         when e.emp_name = p.chief_arch then 'yes'
+    ->         else 'no'
+    ->     end as is_chief_architect
+    -> from employee e
+    -> join assigned_to a on e.emp_id = a.emp_id
+    -> join project p on a.project_id = p.project_id;
++----------------+---------------------+--------------------+
+| emp_name       | proj_name           | is_chief_architect |
++----------------+---------------------+--------------------+
+| rahul_patil    | smart_city_system   | no                 |
+| sneha_joshi    | ai_health_monitor   | no                 |
+| amit_desai     | e_library_platform  | no                 |
+| priya_nair     | cloud_security_tool | no                 |
+| karan_malhotra | fintech_app         | no                 |
++----------------+---------------------+--------------------+
+5 rows in set (0.00 sec)
+
+mysql> -- 4th upper 5th right above over
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> exit
+Bye
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database product_ship;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use product_ship;
+Database changed
+mysql> create table customer (cust_id int primary key, cust_name varchar(100), annual_revenue decimal int, cust_type varchar(20) check (cust_type in ('manufacturer','wholesaler','retailer')));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int, cust_type varchar(20) check (cust_type in ('manufacturer','wholesaler','ret' at line 1
+mysql> create table customer (cust_id int primary key, cust_name varchar(100), annual_revenue int, cust_type varchar(20) check (cust_type in ('manufacturer','wholesaler','retailer')));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc customer;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| cust_id        | int          | NO   | PRI | NULL    |       |
+| cust_name      | varchar(100) | YES  |     | NULL    |       |
+| annual_revenue | int          | YES  |     | NULL    |       |
+| cust_type      | varchar(20)  | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table truck (truck_no int primary key, driver_name varchar(40));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> descc truck;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'descc truck' at line 1
+mysql> desc truck;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| truck_no    | int         | NO   | PRI | NULL    |       |
+| driver_name | varchar(40) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table city (city_name varchar(25) primary key, population int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table shipment (shipment_no int primary key, cust_id int, weight int, destination varchar(25), ship_date date, truck_no int, city_name varchar(25), foreign key (cust_id) references customer(cust_id), foreign key (truck_no) references truck(truck_no), foreign key (city_name) references city(city_name));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select distinct t.driver_name
+    -> from shipment s
+    -> join truck t on s.truck_no = t.truck_no
+    -> where s.weight > 100;
+Empty set (0.00 sec)
+
+mysql> -- 1st query done
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select
+    ->     s.shipment_no,
+    ->     c.cust_name,
+    ->     t.driver_name,
+    ->     ci.city_name,
+    ->     s.weight
+    -> from shipment s
+    -> join customer c on s.cust_id = c.cust_id
+    -> join truck t on s.truck_no = t.truck_no
+    -> join city ci on s.city_name = ci.city_name
+    ->
+    -> ;
+Empty set (0.01 sec)
+
+mysql> select
+    -> s.shipment_no,
+    -> c.cust_name,
+    -> t.driver_name,
+    -> ci.city_name,
+    -> s.weight
+    -> from shipment s
+    -> join customer c on s.cust_id = c.cust_id
+    -> join truck t on s.truck_no = t.truck_no
+    -> join city ci on s.city_name = ci.city_name
+    -> where s.weight > 1000;
+Empty set (0.00 sec)
+
+mysql>
+mysql> -- 2nd query done
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select
+    -> t.truck_no,
+    -> t.driver_name,
+    -> s.shipment_no,
+    -> c.cust_name,
+    -> ci.city_name
+    -> from truck
+    -> left join shipment s on t.truck_no = s.truck_no
+    -> left join customer c on s.cust_id = c.cust_id
+    -> left join city ci on s.city_name = ci.city_name;
+ERROR 1054 (42S22): Unknown column 't.truck_no' in 'field list'
+mysql>
+mysql>
+mysql>
+mysql> select
+    -> t.truck_no,
+    -> t.driver_name,
+    -> s.shipment_no,
+    -> c.cust_name,
+    -> ci.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no = s.truck_no
+    -> left join customer c on s.cust_id = c.cust_id
+    -> left join city ci on s.city_name = ci.city_name;
+Empty set (0.00 sec)
+
+mysql> -- 3rd query done
+mysql>
+mysql>
+mysql> select
+    -> t.truck_no,
+    -> t.driver_name,
+    -> s.shipment_no,
+    -> c.cust_name,
+    -> ci.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no = s.truck_no
+    -> left join customer c on s.cust_id = c.cust_id
+    -> left join city ci on s.city_name = ci.city_name;
+Empty set (0.00 sec)
+
+mysql> -- 4th query done
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select s.shipment_no, ci.city_name
+    -> from shipment s
+    -> left join city ci on s.city_name = ci.city_name
+    ->
+    -> union
+    ->
+    -> select s.shipment_no, ci.city_name
+    -> from shipment
+    -> right join city ci on s.city_name = ci.city_name;
+ERROR 1054 (42S22): Unknown column 's.shipment_no' in 'field list'
+mysql> select s.shipment_no, ci.city_name
+    -> from shipment s
+    -> left join city ci on s.city_name = ci.city_name
+    -> unio
+    -> select s.shipment_no, ci.city_name
+    -> from shipment s
+    -> right join city ci on s.city_name = ci.city_name;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unio
+select s.shipment_no, ci.city_name
+from shipment s
+right join city ci on s.' at line 4
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select s.shipment_no, ci.city_name
+    -> from shipment s
+    -> left join city ci on s.city_name = ci.city_name
+    -> union
+    -> select s.shipment_no, ci.city_name
+    -> from shipment s
+    -> right join city ci on s.city_name = ci.city_name;
+Empty set (0.00 sec)
+
+mysql> -- 5th query done
+mysql>
+mysql>
+mysql>
