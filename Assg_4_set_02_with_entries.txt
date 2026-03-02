@@ -1,0 +1,287 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\WINDOWS\system32> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| product_ship       |
+| resumelens         |
+| sakila             |
+| set_01_ass_4       |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.01 sec)
+
+mysql> use product_ship
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_product_ship |
++------------------------+
+| city                   |
+| customer               |
+| shipment               |
+| truck                  |
++------------------------+
+4 rows in set (0.01 sec)
+
+mysql> select* from customer;
+Empty set (0.01 sec)
+
+mysql> INSERT INTO CUSTOMER VALUES
+    -> (1, 'Tata Industries', 5000000, 'manufacturer'),
+    -> (2, 'Reliance Retail', 3000000, 'retailer'),
+    -> (3, 'Infosys Ltd', 4500000, 'manufacturer'),
+    -> (4, 'Big Bazaar', 2000000, 'wholesaler'),
+    -> (5, 'D-Mart', 2500000, 'retailer');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer
+    -> ;
++---------+-----------------+----------------+--------------+
+| cust_id | cust_name       | annual_revenue | cust_type    |
++---------+-----------------+----------------+--------------+
+|       1 | Tata Industries |        5000000 | manufacturer |
+|       2 | Reliance Retail |        3000000 | retailer     |
+|       3 | Infosys Ltd     |        4500000 | manufacturer |
+|       4 | Big Bazaar      |        2000000 | wholesaler   |
+|       5 | D-Mart          |        2500000 | retailer     |
++---------+-----------------+----------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO TRUCK VALUES
+    -> (101, 'Ramesh Kumar'),
+    -> (102, 'Suresh Patil'),
+    -> (103, 'Amit Sharma'),
+    -> (104, 'Vikram Singh'),
+    -> (105, 'Rahul Desai');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select* from truck;
++----------+--------------+
+| truck_no | driver_name  |
++----------+--------------+
+|      101 | Ramesh Kumar |
+|      102 | Suresh Patil |
+|      103 | Amit Sharma  |
+|      104 | Vikram Singh |
+|      105 | Rahul Desai  |
++----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO CITY VALUES
+    -> ('Mumbai', 20000000),
+    -> ('Delhi', 18000000),
+    -> ('Pune', 7000000),
+    -> ('Bangalore', 12000000),
+    -> ('Hyderabad', 10000000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from city;
++-----------+------------+
+| city_name | population |
++-----------+------------+
+| Bangalore |   12000000 |
+| Delhi     |   18000000 |
+| Hyderabad |   10000000 |
+| Mumbai    |   20000000 |
+| Pune      |    7000000 |
++-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO SHIPMENT VALUES
+    -> (1001, 1, 1200, 101, 'Mumbai', '2026-01-10'),
+    -> (1002, 2, 800, 102, 'Delhi', '2026-01-15'),
+    -> (1003, 3, 1500, 103, 'Pune', '2026-02-01'),
+    -> (1004, 4, 600, 104, 'Bangalore', '2026-02-10'),
+    -> (1005, 5, 2000, 105, 'Hyderabad', '2026-02-20');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> desc shipment;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| shipment_no | int         | NO   | PRI | NULL    |       |
+| cust_id     | int         | YES  | MUL | NULL    |       |
+| weight      | int         | YES  |     | NULL    |       |
+| destination | varchar(25) | YES  |     | NULL    |       |
+| ship_date   | date        | YES  |     | NULL    |       |
+| truck_no    | int         | YES  | MUL | NULL    |       |
+| city_name   | varchar(25) | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+
+mysql> insert into shipment
+    -> (shipment_no, cust_id, weight, destination, ship_date, truck_no, city_name)
+    -> values
+    -> (1001, 1, 1200, 'warehouse a', '2026-01-10', 101, 'mumbai'),
+    -> (1002, 2, 800,  'retail hub',  '2026-01-15', 102, 'delhi'),
+    -> (1003, 3, 1500, 'tech park',   '2026-02-01', 103, 'pune'),
+    -> (1004, 4, 600,  'city mall',   '2026-02-10', 104, 'bangalore'),
+    -> (1005, 5, 2000, 'main depot',  '2026-02-20', 105, 'hyderabad');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from shipment;
++-------------+---------+--------+-------------+------------+----------+-----------+
+| shipment_no | cust_id | weight | destination | ship_date  | truck_no | city_name |
++-------------+---------+--------+-------------+------------+----------+-----------+
+|        1001 |       1 |   1200 | warehouse a | 2026-01-10 |      101 | mumbai    |
+|        1002 |       2 |    800 | retail hub  | 2026-01-15 |      102 | delhi     |
+|        1003 |       3 |   1500 | tech park   | 2026-02-01 |      103 | pune      |
+|        1004 |       4 |    600 | city mall   | 2026-02-10 |      104 | bangalore |
+|        1005 |       5 |   2000 | main depot  | 2026-02-20 |      105 | hyderabad |
++-------------+---------+--------+-------------+------------+----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct t.driver_name
+    -> from shipment s
+    -> join truck t on s.truck_no = t.truck_no
+    -> where s.weight > 100;
++--------------+
+| driver_name  |
++--------------+
+| Ramesh Kumar |
+| Suresh Patil |
+| Amit Sharma  |
+| Vikram Singh |
+| Rahul Desai  |
++--------------+
+5 rows in set (0.00 sec)
+
+mysql> -- first 1st done
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> --2nd second d
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--2nd second d' at line 1
+mysql> -- 2nd second
+mysql>
+mysql>
+mysql>
+mysql> select s.shipment_no,c.cust_name,t.driver_name,s.city_name,s.weight
+    -> from shipment s
+    -> join customer c on s.cust_id=c.cust_id
+    -> join truck t on s.truck_no=t.truck_no
+    -> where s.weight>1000;
++-------------+-----------------+--------------+-----------+--------+
+| shipment_no | cust_name       | driver_name  | city_name | weight |
++-------------+-----------------+--------------+-----------+--------+
+|        1001 | Tata Industries | Ramesh Kumar | mumbai    |   1200 |
+|        1003 | Infosys Ltd     | Amit Sharma  | pune      |   1500 |
+|        1005 | D-Mart          | Rahul Desai  | hyderabad |   2000 |
++-------------+-----------------+--------------+-----------+--------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> -- 3rd third
+mysql>
+mysql> select t.truck_no,t.driver_name,s.shipment_no,c.cust_name,s.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no=s.truck_no
+    -> left join customer c on cust_id=c.cust_id;
+ERROR 1052 (23000): Column 'cust_id' in on clause is ambiguous
+mysql> select t.truck_no,t.driver_name,s.shipment_no,c.cust_name,s.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no=s.truck_no
+    -> left join customer c on s.cust_id=c.cust_id;
++----------+--------------+-------------+-----------------+-----------+
+| truck_no | driver_name  | shipment_no | cust_name       | city_name |
++----------+--------------+-------------+-----------------+-----------+
+|      101 | Ramesh Kumar |        1001 | Tata Industries | mumbai    |
+|      102 | Suresh Patil |        1002 | Reliance Retail | delhi     |
+|      103 | Amit Sharma  |        1003 | Infosys Ltd     | pune      |
+|      104 | Vikram Singh |        1004 | Big Bazaar      | bangalore |
+|      105 | Rahul Desai  |        1005 | D-Mart          | hyderabad |
++----------+--------------+-------------+-----------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> selcet t.truck_no,t.driver_name,s.shipment_no,s.weight,c.cust_name,s.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no=s.truck_no
+    -> left join customer c on s.cust_id=c.cust_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selcet t.truck_no,t.driver_name,s.shipment_no,s.weight,c.cust_name,s.city_name
+' at line 1
+mysql> select t.truck_no,t.driver_name,s.shipment_no,s.weight,c.cust_name,s.city_name
+    -> from truck t
+    -> left join shipment s on t.truck_no=s.truck_no
+    -> left join customer c on s.cust_id=c.cust_id;
++----------+--------------+-------------+--------+-----------------+-----------+
+| truck_no | driver_name  | shipment_no | weight | cust_name       | city_name |
++----------+--------------+-------------+--------+-----------------+-----------+
+|      101 | Ramesh Kumar |        1001 |   1200 | Tata Industries | mumbai    |
+|      102 | Suresh Patil |        1002 |    800 | Reliance Retail | delhi     |
+|      103 | Amit Sharma  |        1003 |   1500 | Infosys Ltd     | pune      |
+|      104 | Vikram Singh |        1004 |    600 | Big Bazaar      | bangalore |
+|      105 | Rahul Desai  |        1005 |   2000 | D-Mart          | hyderabad |
++----------+--------------+-------------+--------+-----------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> -- 4th fourth done
+mysql>
+mysql>
+mysql>
+mysql> -- 5th fifth
+mysql>
+mysql> select s.shipment_no,
+    -> s.city_name,
+    -> c.city_name as city_from_city_table
+    -> from shipment s
+    -> full join city c
+    -> on s.city_name=c.city_name;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'full join city c
+on s.city_name=c.city_name' at line 5
+mysql> select s.shipment_no,s.city_name,c.city_name as city_from_city_table
+    -> from shipment s
+    -> left join city c on s.city_name=c.city_name
+    -> union
+    -> select s.shipment_no,s.city_name,c.city_name as city_from_city_table
+    -> from shipment s
+    -> right join city c on s.city_name=c.city_name;
++-------------+-----------+----------------------+
+| shipment_no | city_name | city_from_city_table |
++-------------+-----------+----------------------+
+|        1004 | bangalore | Bangalore            |
+|        1002 | delhi     | Delhi                |
+|        1005 | hyderabad | Hyderabad            |
+|        1001 | mumbai    | Mumbai               |
+|        1003 | pune      | Pune                 |
++-------------+-----------+----------------------+
+5 rows in set (0.01 sec)
+
+mysql> -- end
+mysql>
