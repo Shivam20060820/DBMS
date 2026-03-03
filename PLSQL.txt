@@ -1,0 +1,387 @@
+Last login: Fri Feb 27 11:44:28 on ttys000
+vyaas125@VY030-40 ~ % create database shivam1;
+zsh: command not found: create
+vyaas125@VY030-40 ~ % mysql -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+vyaas125@VY030-40 ~ % mysql -u root -p        
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 9.3.0-commercial MySQL Enterprise Server - Commercial
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database shivam1;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use shivam1;
+Database changed
+mysql> create table stud(prn int,
+    -> name varchar(20),
+    -> city varchar(18),
+    -> sub varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into stud values(1,"Shivam","Pune","DBMS");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into stud values(2,"Ishaan","Mumbai","DAA");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into stud values(3,"ishita","Indore","OOP");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from stud;
++------+--------+--------+------+
+| prn  | name   | city   | sub  |
++------+--------+--------+------+
+|    1 | Shivam | Pune   | DBMS |
+|    2 | Ishaan | Mumbai | DAA  |
+|    3 | ishita | Indore | OOP  |
++------+--------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into stud values(4,"Harshal","Nagpur","PS");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stud;
++------+---------+--------+------+
+| prn  | name    | city   | sub  |
++------+---------+--------+------+
+|    1 | Shivam  | Pune   | DBMS |
+|    2 | Ishaan  | Mumbai | DAA  |
+|    3 | ishita  | Indore | OOP  |
+|    4 | Harshal | Nagpur | PS   |
++------+---------+--------+------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter /
+mysql> create procedure display
+    -> ;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ERROR: 
+No query specified
+
+mysql> delimiter /
+mysql> create prodecure data1()
+    -> begin
+    -> select* from stud
+    -> end /
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prodecure data1()
+begin
+select* from stud
+end' at line 1
+mysql> delimiter /
+mysql> create prodecure data1()
+    -> begin
+    -> select*from stud;
+    -> end /
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'prodecure data1()
+begin
+select*from stud;
+end' at line 1
+mysql> create procedure data1()
+    -> begin
+    -> select*from stud;
+    -> end /
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call data1();
++------+---------+--------+------+
+| prn  | name    | city   | sub  |
++------+---------+--------+------+
+|    1 | Shivam  | Pune   | DBMS |
+|    2 | Ishaan  | Mumbai | DAA  |
+|    3 | ishita  | Indore | OOP  |
+|    4 | Harshal | Nagpur | PS   |
++------+---------+--------+------+
+4 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delmiter /
+    -> create procedure display_limit(in a int)
+    -> begin
+    -> select *from stud where limit=2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delmiter /
+create procedure display_limit(in a int)
+begin
+select *from stud wher' at line 1
+mysql> delimiter /
+mysql> create procedure add1(in a int)
+    -> select * from stud limit a;
+    -> /
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call add1(2)/
++------+--------+--------+------+
+| prn  | name   | city   | sub  |
++------+--------+--------+------+
+|    1 | Shivam | Pune   | DBMS |
+|    2 | Ishaan | Mumbai | DAA  |
++------+--------+--------+------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> alter table stud add marks int;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update stud set marks=90 where prn=1;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update stud set marks=85 where prn=2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update stud set marks=87 where prn=3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update stud set marks=83 where prn=4;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from stud;
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    90 |
+|    2 | Ishaan  | Mumbai | DAA  |    85 |
+|    3 | ishita  | Indore | OOP  |    87 |
+|    4 | Harshal | Nagpur | PS   |    83 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter /
+mysql> create procedure marksadd(in a int)
+    -> begin
+    -> update stud
+    -> set marks=marks+marks*0.1
+    -> where prn=a;
+    -> end /
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call marksadd(2)
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from stud;
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    90 |
+|    2 | Ishaan  | Mumbai | DAA  |    94 |
+|    3 | ishita  | Indore | OOP  |    87 |
+|    4 | Harshal | Nagpur | PS   |    83 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> call marksadd(1)
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> call marksadd(4)
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from stud;
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    99 |
+|    2 | Ishaan  | Mumbai | DAA  |    94 |
+|    3 | ishita  | Indore | OOP  |    87 |
+|    4 | Harshal | Nagpur | PS   |    91 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter /
+mysql> create procedure max_marks(out a int)
+    -> begin
+    -> select max(marks) into a from stud;
+    -> end /
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call max_marks(@m);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stud;
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    99 |
+|    2 | Ishaan  | Mumbai | DAA  |    94 |
+|    3 | ishita  | Indore | OOP  |    87 |
+|    4 | Harshal | Nagpur | PS   |    91 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> call max_marks(@a);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> call max_marks(@m);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @m;
++------+
+| @m   |
++------+
+|   99 |
++------+
+1 row in set (0.00 sec)
+
+mysql> call max_marks(@a);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @a;
++------+
+| @a   |
++------+
+|   99 |
++------+
+1 row in set (0.00 sec)
+
+mysql> delimiter /
+mysql> create procedure vari()
+    -> begin
+    -> set @x=10;
+    -> set @b=2;
+    -> select @x,@b,@x-@b;
+    -> end /
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call vari()/
++------+------+-------+
+| @x   | @b   | @x-@b |
++------+------+-------+
+|   10 |    2 |     8 |
++------+------+-------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter /
+mysql> create procedure cnt(inout counter int,in increment int)
+    -> begin
+    -> counter = counter +increment;
+    -> end /
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= counter +increment; 
+end' at line 3
+mysql> select * from stud;
+    -> /
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    99 |
+|    2 | Ishaan  | Mumbai | DAA  |    94 |
+|    3 | ishita  | Indore | OOP  |    87 |
+|    4 | Harshal | Nagpur | PS   |    91 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create function tbl_up(name varchar(20),m1 int)
+    -> returns int
+    -> deterministic
+    -> begin
+    -> update stud set marks=m1 where name=name;
+    -> end //
+ERROR 1320 (42000): No RETURN found in FUNCTION shivam1.tbl_up
+mysql> create function tbl_up(name varchar(20),m1 int)
+    -> returns int
+    -> begin
+    -> update stud set marks=m1 where name=name;
+    -> return 1;
+    -> end //
+ERROR 1418 (HY000): This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
+mysql> create function tbl_up(name varchar(20),m1 int)
+    -> returns int
+    -> deterministic
+    -> update stud set marks=m1 where name=name;
+    -> return 1;
+    -> end //
+ERROR 1320 (42000): No RETURN found in FUNCTION shivam1.tbl_up
+mysql> create function tbl_up(name varchar(20),m1 int)
+    -> returns int
+    -> deterministic
+    -> begin
+    -> update stud set marks=m1 where name=name;
+    -> return 1;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select tbl_up('Shivam',100)
+    -> //
++----------------------+
+| tbl_up('Shivam',100) |
++----------------------+
+|                    1 |
++----------------------+
+1 row in set (0.01 sec)
+
+mysql> select * from stud;
+    -> //
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |   100 |
+|    2 | Ishaan  | Mumbai | DAA  |   100 |
+|    3 | ishita  | Indore | OOP  |   100 |
+|    4 | Harshal | Nagpur | PS   |   100 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create function tbl_up1(s_name varchar(20),m1 int)
+    -> returns int
+    -> deterministic
+    -> update stud
+    -> set marks=m1 where name=s_name;
+    -> return 1;
+    -> end //
+ERROR 1320 (42000): No RETURN found in FUNCTION shivam1.tbl_up1
+mysql> create function tbl_up1(s_name varchar(20),m1 int)
+    -> returns int
+    -> deterministic
+    -> begin
+    -> update stud
+    -> set marks=m1 where name=s_name;
+    -> return 1;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select tbl_up1('Shivam',98)//
++----------------------+
+| tbl_up1('Shivam',98) |
++----------------------+
+|                    1 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from stud//
++------+---------+--------+------+-------+
+| prn  | name    | city   | sub  | marks |
++------+---------+--------+------+-------+
+|    1 | Shivam  | Pune   | DBMS |    98 |
+|    2 | Ishaan  | Mumbai | DAA  |   100 |
+|    3 | ishita  | Indore | OOP  |   100 |
+|    4 | Harshal | Nagpur | PS   |   100 |
++------+---------+--------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> 
