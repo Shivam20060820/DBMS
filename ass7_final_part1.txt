@@ -1,0 +1,86 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database ass7_final;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use ass7_final;
+Database changed
+mysql> CREATE TABLE accounts(account_id int primary key,
+    -> name varchar(20),
+    -> balance int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC accounts;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| account_id | int         | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| balance    | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> DELIMITER /
+mysql> CREATE PROCEDURE money_transfer(
+    -> in sender_id int,
+    -> in receiver_id int,
+    -> in amount int)
+    -> money_transfer: BEGIN
+    -> IF EXISTS(SELECT 1 FROM accounts where account_id=sender_id)
+    -> AND EXISTS(SELECT 1 FROM accounts where account_id=receiver_id)
+    -> THEN
+    -> UPDATE accounts SET balance = balance - amount WHERE account_id=sender_id;
+    -> UPDATE accounts SET balance = balance + amount WHERE account_id=receiver_id;
+    -> opop;
+    -> END//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
+END' at line 11
+ERROR:
+No query specified
+
+mysql> DELIMITER /
+mysql> CREATE PROCEDURE money_transfer(
+    -> in sender_id int,
+    -> in receiver_id int,
+    -> in amount int)
+    -> money_transfer: BEGIN
+    -> IF EXISTS(SELECT 1 FROM accounts where account_id=sender_id)
+    -> AND EXISTS(SELECT 1 FROM accounts where account_id=receiver_id)
+    -> THEN
+    -> IF (SELECT balance FROM accounts WHERE account_id = sender_id) >= amount
+    -> THEN
+    -> START TRANSACTION;
+    -> SAVEPOINT A;
+    -> UPDATE accounts SET balance = balance - amount WHERE account_id=sender_id;
+    -> UPDATE accounts SET balance = balance + amount WHERE account_id=receiver_id;
+    -> COMMIT;
+    -> ELSE
+    -> SELECT 'Insufficient balance';
+    ->             ROLLBACK TO SAVEPOINT A;
+    -> END IF;
+    -> ELSE
+    -> SELECT 'Either of the accounts does not exist';
+    -> LEAVE money_transfer;
+    -> END IF;
+    -> End/
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql>
