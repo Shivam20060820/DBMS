@@ -1,0 +1,261 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass7               |
+| ass7_final         |
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| product_ship       |
+| resumelens         |
+| sakila             |
+| set_01_ass_4       |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.02 sec)
+
+mysql> use ass7_final;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_ass7_final |
++----------------------+
+| accounts             |
++----------------------+
+1 row in set (0.01 sec)
+
+mysql> create database ass7_2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass7               |
+| ass7_2             |
+| ass7_final         |
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| product_ship       |
+| resumelens         |
+| sakila             |
+| set_01_ass_4       |
+| sys                |
+| world              |
++--------------------+
+13 rows in set (0.00 sec)
+
+mysql> use ass7_2
+Database changed
+mysql> CREATE TABLE orders(
+    -> order_id int unique,
+    -> customer_id int unique,
+    -> order_status varchar(20) CHECK (order_status IN('completed','not completed')),
+    -> total_amount int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT * from orders;
+Empty set (0.01 sec)
+
+mysql> DESC orders;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| order_id     | int         | YES  | UNI | NULL    |       |
+| customer_id  | int         | YES  | UNI | NULL    |       |
+| order_status | varchar(20) | YES  |     | NULL    |       |
+| total_amount | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> DELIMITER /
+mysql> DELIMITER ;
+mysql> ALTER TABLE orders DROP customer_id int unique;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int unique' at line 1
+mysql> ALTER TABLE orders DROP INDEX customer_id;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc orders;;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| order_id     | int         | YES  | UNI | NULL    |       |
+| customer_id  | int         | YES  |     | NULL    |       |
+| order_status | varchar(20) | YES  |     | NULL    |       |
+| total_amount | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+ERROR:
+No query specified
+
+mysql> DELIMITER /
+mysql> CREATE FUNCTION order_sum(int cust int, out total int)
+    ->  RETURNS INT
+    -> NOT DETERMINISTIC
+    -> BEGIN
+    -> IF EXISTS(SELECT 1 FROM orders where customer_id=cust)
+    -> set total = (select sum(total_amount) FROM orders where order_status='completed');
+    -> return 1;
+    -> end /
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int cust int, out total int)
+        RETURNS INT
+NOT DETERMINISTIC
+BEGIN
+IF EXISTS(SELE' at line 1
+mysql> CREATE FUNCTION order_sum(cust int)
+    -> ;
+    -> ;
+    -> ;
+    -> ;
+    -> ;
+    ->
+    -> ;
+    -> /
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> DELIMITER ;
+mysql> DELIMITER /
+mysql> CREATE FUNCTION order_sum(cust int)
+    -> RETURNS INT
+    -> NOT DETERMINISTIC
+    -> BEGIN
+    -> DECLARE total int;
+    -> IF EXISTS(SELECT 1 FROM orders where customer_id=cust)
+    -> THEN
+    -> SELECT sum(total_amount) INTO total
+    -> FROM orders
+    -> where customer_id=cust
+    -> AND order_status='completed';
+    -> ELSE
+    -> SET total=0;
+    -> END IF;
+    -> RETURN total;
+    -> END /
+ERROR 1418 (HY000): This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
+mysql> CREATE FUNCTION order_sum(cust int)
+    -> RETURNS INT
+    -> NOT DETERMINISTIC
+    -> READ SQL DATA
+    -> BEGIN
+    -> DECLARE total int;
+    -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
+    -> THEN
+    -> SELECT SUM(total_amount) INTO total
+    -> FROM orders
+    -> WHERE customer_id = cust
+    -> AND order_status = 'completed';
+    -> ELSE
+    -> SET total=0;
+    -> END IF;
+    -> RETURN total;
+    -> END/
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'READ SQL DATA
+BEGIN
+DECLARE total int;
+IF EXISTS (SELECT 1 FROM orders WHERE cus' at line 4
+mysql> CREATE FUNCTION order_sum(cust int)
+    ->     -> RETURNS INT
+    ->     -> NOT DETERMINISTIC
+    ->     -> READS SQL DATA
+    ->     -> BEGIN
+    ->     -> DECLARE total int;
+    ->     -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
+    ->     -> THEN
+    ->     -> SELECT SUM(total_amount) INTO total
+    ->     -> FROM orders
+    ->     -> WHERE customer_id = cust
+    ->     -> AND order_status = 'completed';
+    ->     -> ELSE
+    ->     -> SET total=0;
+    ->     -> END IF;
+    ->     -> RETURN total;
+    ->     -> END/
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> RETURNS INT
+    -> NOT DETERMINISTIC
+    -> READS SQL DATA
+    -> BEGIN
+    -' at line 2
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> -- 2)
+mysql>
+mysql> CREATE FUNCTION order_sum(cust int)
+    -> RETURNS INT
+    -> NOT DETERMINISTIC
+    -> READS SQL DATA
+    -> BEGIN
+    -> DECLARE total int;
+    -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
+    -> THEN
+    -> SELECT SUM(total_amount) INTO total
+    -> FROM orders
+    -> WHERE customer_id = cust
+    -> AND order_status = 'completed';
+    -> ELSE
+    -> SET total=0;
+    -> END IF;
+    -> RETURN total;
+    -> END/
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>  INSERT INTO orders VALUES
+    -> (1,101,'completed',500),
+    -> (2,102,'completed',700),
+    -> (3,101,'not completed',300),
+    -> (4,103,'completed',900),
+    -> (5,104,'not completed',450),
+    -> (6,102,'completed',650),
+    -> (7,105,'completed',800),
+    -> (8,101,'completed',550),
+    -> (9,103,'not completed',200),
+    -> (10,104,'completed',750);
+    -> /
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER ;
+mysql> Select order_sum(101);
++----------------+
+| order_sum(101) |
++----------------+
+|           1050 |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> Select order_sum(110);
++----------------+
+| order_sum(110) |
++----------------+
+|              0 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql>
