@@ -1,0 +1,34 @@
+import mysql.connector
+
+conn=mysql.connector.connect(user='root',host='localhost',password='mysqlroot')
+
+cursor=conn.cursor()
+cursor.execute("create database if not exists shivam12")
+cursor.execute("use shivam12")
+cursor.execute("create table if not exists table1(prn int primary key);")
+x=int(input("Enter a number"))
+cursor.execute("insert into table1 values(%s);",(x,))
+y=input(cursor.execute("Select*from table1;"))
+print(y)
+cursor.execute("commit;")
+
+#mycode
+
+import pymysql
+db=pymysql.connect(host='localhost',user='root',password='mysqlroot')
+cursor=db.cursor()
+
+cursor.execute("create database if not exists shivam_asg6_final;")
+print("shivam_asg6_final database created")
+cursor.execute("use shivam_asg6_final;")
+cursor.execute("create table if not exists stud(prn int primary key,name varchar(20),subject varchar(20));")
+sql=("insert into stud values(%s,%s,%s)")
+val=[(16,"now","DBMS"),(17,"duh","DAA")]
+cursor.executemany(sql,val)
+cursor = db.cursor()
+cursor.execute("SELECT * FROM stud")
+results=cursor.fetchall()
+for row in results:
+    print(row)
+db.commit()
+db.close()
