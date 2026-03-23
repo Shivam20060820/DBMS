@@ -1,0 +1,394 @@
+(base) vyaas124@VY030-36 ~ % mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 9.3.0-commercial MySQL Enterprise Server - Commercial
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++----------------------------+
+| Database                   |
++----------------------------+
+| 21Jan                      |
+| a4                         |
+| a_db                       |
+| assgn3                     |
+| assgn4                     |
+| assgn7                     |
+| assign2                    |
+| assign3                    |
+| assign4                    |
+| assignment3                |
+| author                     |
+| Bank                       |
+| Books                      |
+| booksstore                 |
+| bookstore                  |
+| class_db                   |
+| classicmodels              |
+| College                    |
+| COMP                       |
+| company                    |
+| company1                   |
+| company18                  |
+| company2                   |
+| company3                   |
+| company4                   |
+| companydb                  |
+| companyy                   |
+| db1                        |
+| dbms                       |
+| democonn1                  |
+| democonn2                  |
+| Employee                   |
+| f12                        |
+| f2                         |
+| Hospital_Management_System |
+| HOTEL                      |
+| hotel1                     |
+| information_schema         |
+| kan                        |
+| kanu                       |
+| lib                        |
+| library_m                  |
+| mitwpu                     |
+| mysql                      |
+| p1                         |
+| performance_schema         |
+| project_db                 |
+| s_db                       |
+| school_db                  |
+| sneha_db                   |
+| spj_db                     |
+| student                    |
+| sy1_db                     |
+| sy_db                      |
+| sys                        |
+| t21                        |
+| table1                     |
+| uni                        |
+| university                 |
+| university2                |
+| Vaibhav_COMPANY            |
+| vaibhav_hoteldb            |
+| vaibhavdb                  |
++----------------------------+
+63 rows in set (0.01 sec)
+
+mysql> create database shivam1;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use shivam1
+Database changed
+mysql> create table person(name varchar(20), age int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into person values("shivam", 19)
+    -> ,("ishaan", 20),
+    -> ("harshal",21);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from person;
++---------+------+
+| name    | age  |
++---------+------+
+| shivam  |   19 |
+| ishaan  |   20 |
+| harshal |   21 |
++---------+------+
+3 rows in set (0.00 sec)
+
+mysql> create table avgage(avg double);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from avgage;
+Empty set (0.00 sec)
+
+mysql> -- undirect way of inserting the record
+mysql> -- in*
+mysql> insert into avgage select avg(age) from person;
+Query OK, 1 row affected (0.00 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> select * from avgage
+    -> ;
++------+
+| avg  |
++------+
+|   20 |
++------+
+1 row in set (0.00 sec)
+
+mysql> create table person_archive(name varchar(20), age int, time stamp default now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'stamp default now())' at line 1
+mysql> create table person_archive(name varchar(20), age int, timestamp default now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'default now())' at line 1
+mysql> create table person_archive(name varchar(20), age int, time timestamp default now());
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> create trigger person_bi before insert
+    -> on person
+    -> for each row
+    -> if new.age< 18 then
+    -> signal sqlstate '50001' set message_text="Person must be older than 18";
+    -> end if; //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> insert into person values("Akhi", 14);
+ERROR 1644 (50001): Person must be older than 18
+mysql> insert into person values("MUNNI", 14);
+ERROR 1644 (50001): Person must be older than 18
+mysql> select*from person
+    -> ;
++---------+------+
+| name    | age  |
++---------+------+
+| shivam  |   19 |
+| ishaan  |   20 |
+| harshal |   21 |
++---------+------+
+3 rows in set (0.00 sec)
+
+mysql> -- create an after insert trigger on the person table to update the avg_age table after insert:
+mysql> delimiter //
+mysql> create trigger person_ai after insert 
+    -> on person
+    -> for each row
+    -> update avgage set avg=(select avg(age) from person);//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into person values("Akhi", 30);
+    -> //
+Query OK, 1 row affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> select*from avgage;
++------+
+| avg  |
++------+
+| 22.5 |
++------+
+1 row in set (0.00 sec)
+
+mysql> select * from person;
++---------+------+
+| name    | age  |
++---------+------+
+| shivam  |   19 |
+| ishaan  |   20 |
+| harshal |   21 |
+| Akhi    |   30 |
++---------+------+
+4 rows in set (0.00 sec)
+
+mysql> create table account(acc_id int primary key, name varchar(20),balance int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into account values(1,"shivam",1000), (2,"ishaan",100);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from account;
++--------+--------+---------+
+| acc_id | name   | balance |
++--------+--------+---------+
+|      1 | shivam |    1000 |
+|      2 | ishaan |     100 |
++--------+--------+---------+
+2 rows in set (0.00 sec)
+
+mysql> create table acc_arch(acc_id int, name varchar(20), time timestamp check default now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'default now())' at line 1
+mysql> create table acc_arch(acc_id int, name varchar(20), time timestamp default now());
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> d-- trigger, if u delete a record from account it should get added into account archive
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'd' at line 1
+mysql> delimiter //
+mysql> create trigger per_del after delete
+    -> on account
+    -> for each row
+    -> insert into acc_arch from account;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from account' at line 4
+mysql> create trigger per_del after delete on account for each row insert into acc_arch acc_id,name,balance  from account;//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'acc_id,name,balance  from account' at line 1
+mysql> create trigger per_del after delete on account for each row insert into acc_arch select acc_id,name,balance  from account;//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> delete from person where acc_id=1;
+    -> //
+ERROR 1054 (42S22): Unknown column 'acc_id' in 'where clause'
+mysql> delete from account where name="shivam";
+    -> //
+ERROR 1292 (22007): Incorrect datetime value: '100' for column 'time' at row 1
+mysql> create trigger per_del after delete on account for each row insert into acc_arch select acc_id,name  from account;//
+ERROR 1359 (HY000): Trigger already exists
+mysql> drop trigger per_del;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create trigger per_del after delete on account for each row insert into acc_arch select acc_id,name  from account;//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from account where name="shivam";//
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> drop per_del;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'per_del' at line 1
+mysql> drop trigger per_del;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create trigger per_del after delete on account for each row insert into acc_arch (acc_id,name) select acc_id,name  from account;//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from account where name="shivam";//
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from acc_arch;
+    -> //
++--------+--------+---------------------+
+| acc_id | name   | time                |
++--------+--------+---------------------+
+|      2 | ishaan | 2026-03-23 11:57:17 |
++--------+--------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> -- trigger 1== once u delete the record from the student table and automatically it should get updated into the alumini table
+mysql> -- trig 2== to update the marks after the reval result on result
+mysql> 
+mysql> 
+mysql> create table result(prn int, marks int);
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> create table alumini(admisssiondate date, passoutdate date, prn int );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create table student(name varchar(20), prn int, marks int, attendance int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into student values("shivam", 1, 95,90);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values("ishaan", 2, 85,92);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create trigger aluminus after delete
+    -> on student
+    -> for each row
+    -> insert into alumini(prn) select old.prn from student;
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create trigger marks_up after update
+    -> on student 
+    -> for each row
+    -> insert into result(marks,prn) select new.marks,prn from student;
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from student where prn=1;
+    -> //
+Query OK, 1 row affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> select *from alumini;
++----------------+-------------+------+
+| admisssiondate | passoutdate | prn  |
++----------------+-------------+------+
+| NULL           | NULL        |    1 |
++----------------+-------------+------+
+1 row in set (0.00 sec)
+
+mysql> update student set marks=93 where prn=2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from result;
++------+-------+
+| prn  | marks |
++------+-------+
+|    2 |    93 |
++------+-------+
+1 row in set (0.00 sec)
+
+mysql> select *from student;
++--------+------+-------+------------+
+| name   | prn  | marks | attendance |
++--------+------+-------+------------+
+| ishaan |    2 |    93 |         92 |
++--------+------+-------+------------+
+1 row in set (0.01 sec)
+
+mysql> alter table alumini modify admissiondate date default 20240801;
+ERROR 1054 (42S22): Unknown column 'admissiondate' in 'alumini'
+mysql> alter table alumini modify admisssiondate date default 20240801;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table alumini modify passout date default 20280801;
+ERROR 1054 (42S22): Unknown column 'passout' in 'alumini'
+mysql> alter table alumini modify passoutdate default 20280801;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'default 20280801' at line 1
+mysql> alter table alumini modify passoutdate date default 20280801;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from alumini;
++----------------+-------------+------+
+| admisssiondate | passoutdate | prn  |
++----------------+-------------+------+
+| NULL           | NULL        |    1 |
++----------------+-------------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into student values("shivam", 3, 95,90);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values("chinya", 4, 89,99);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> delete from student where prn=4;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from alumini;
++----------------+-------------+------+
+| admisssiondate | passoutdate | prn  |
++----------------+-------------+------+
+| NULL           | NULL        |    1 |
+| 2024-08-01     | 2028-08-01  |    4 |
+| 2024-08-01     | 2028-08-01  |    4 |
++----------------+-------------+------+
+3 rows in set (0.00 sec)
+
+mysql> delete from student where prn=2;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from alumini;
++----------------+-------------+------+
+| admisssiondate | passoutdate | prn  |
++----------------+-------------+------+
+| NULL           | NULL        |    1 |
+| 2024-08-01     | 2028-08-01  |    4 |
+| 2024-08-01     | 2028-08-01  |    4 |
+| 2024-08-01     | 2028-08-01  |    2 |
++----------------+-------------+------+
+4 rows in set (0.01 sec)
+
+mysql> 
