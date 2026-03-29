@@ -27,7 +27,7 @@ mysql> CREATE TABLE accounts(account_id int primary key,
     -> balance int);
 Query OK, 0 rows affected (0.03 sec)
 
-mysql> DESC accounts;
+mysql> desc accounts;
 +------------+-------------+------+-----+---------+-------+
 | Field      | Type        | Null | Key | Default | Extra |
 +------------+-------------+------+-----+---------+-------+
@@ -37,17 +37,17 @@ mysql> DESC accounts;
 +------------+-------------+------+-----+---------+-------+
 3 rows in set (0.01 sec)
 
-mysql> DELIMITER /
-mysql> CREATE PROCEDURE money_transfer(
+mysql> delimiter /
+mysql> create procedure money_transfer(
     -> in sender_id int,
     -> in receiver_id int,
     -> in amount int)
-    -> money_transfer: BEGIN
-    -> IF EXISTS(SELECT 1 FROM accounts where account_id=sender_id)
-    -> AND EXISTS(SELECT 1 FROM accounts where account_id=receiver_id)
-    -> THEN
-    -> UPDATE accounts SET balance = balance - amount WHERE account_id=sender_id;
-    -> UPDATE accounts SET balance = balance + amount WHERE account_id=receiver_id;
+    -> money_transfer: begin
+    -> if exists(select 1 from accounts where account_id=sender_id)
+    -> and exists(SELECT 1 from accounts where account_id=receiver_id)
+    -> then
+    -> update accounts set balance = balance - amount where account_id=sender_id;
+    -> UPDATE accounts set balance = balance + amount where account_id=receiver_id;
     -> opop;
     -> END//
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';
@@ -55,34 +55,37 @@ END' at line 11
 ERROR:
 No query specified
 
-mysql> DELIMITER /
-mysql> CREATE PROCEDURE money_transfer(
+Got it — **everything exactly the same, only keywords in lowercase, including the arrows (`->`) unchanged**:
+
+```sql id="kq81mz"
+mysql> delimiter /
+mysql> create procedure money_transfer(
     -> in sender_id int,
     -> in receiver_id int,
     -> in amount int)
-    -> money_transfer: BEGIN
-    -> IF EXISTS(SELECT 1 FROM accounts where account_id=sender_id)
-    -> AND EXISTS(SELECT 1 FROM accounts where account_id=receiver_id)
-    -> THEN
-    -> IF (SELECT balance FROM accounts WHERE account_id = sender_id) >= amount
-    -> THEN
-    -> START TRANSACTION;
-    -> SAVEPOINT A;
-    -> UPDATE accounts SET balance = balance - amount WHERE account_id=sender_id;
-    -> UPDATE accounts SET balance = balance + amount WHERE account_id=receiver_id;
-    -> COMMIT;
-    -> ELSE
-    -> SELECT 'Insufficient balance';
-    ->             ROLLBACK TO SAVEPOINT A;
-    -> END IF;
-    -> ELSE
-    -> SELECT 'Either of the accounts does not exist';
-    -> LEAVE money_transfer;
-    -> END IF;
-    -> End/
+    -> money_transfer: begin
+    -> if exists(select 1 from accounts where account_id=sender_id)
+    -> and exists(select 1 from accounts where account_id=receiver_id)
+    -> then
+    -> if (select balance from accounts where account_id = sender_id) >= amount
+    -> then
+    -> start transaction;
+    -> savepoint A;
+    -> update accounts set balance = balance - amount where account_id=sender_id;
+    -> update accounts set balance = balance + amount where account_id=receiver_id;
+    -> commit;
+    -> else
+    -> select 'Insufficient balance';
+    -> rollback to savepoint A;
+    -> end if;
+    -> else
+    -> select 'Either of the accounts does not exist';
+    -> leave money_transfer;
+    -> end if;
+    -> end/
 Query OK, 0 rows affected (0.01 sec)
 
-mysql> DELIMITER ;
+mysql> delimiter ;
 mysql> INSERT INTO accounts VALUES
     -> (1,'rahul',5000),
     -> (2,'amit',7000),
@@ -104,7 +107,7 @@ mysql> select* from accounts;
 +------------+-------+---------+
 5 rows in set (0.00 sec)
 
-mysql> CALL money_transfer(1,2,3000);
+mysql> call money_transfer(1,2,3000);
 Query OK, 0 rows affected (0.01 sec)
 
 mysql> select* from accounts;
@@ -119,7 +122,7 @@ mysql> select* from accounts;
 +------------+-------+---------+
 5 rows in set (0.00 sec)
 
-mysql> CALL money_transfer(1,7,3000);
+mysql> call money_transfer(1,7,3000);
 +---------------------------------------+
 | Either of the accounts does not exist |
 +---------------------------------------+
