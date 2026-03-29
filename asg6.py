@@ -1,6 +1,6 @@
 import pymysql
 #python -m pip install pymysql
-db=pymysql.connect(user="root",host="localhost",password="#Gamerforlife123")
+db=pymysql.connect(user="root",host="localhost",password="your_pass")
 cursor=db.cursor()
 
 cursor.execute("drop database shivam_banking")
