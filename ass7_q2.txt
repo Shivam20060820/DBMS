@@ -71,14 +71,14 @@ mysql> show databases;
 
 mysql> use ass7_2
 Database changed
-mysql> CREATE TABLE orders(
+mysql> create TABLE orders(
     -> order_id int unique,
     -> customer_id int unique,
     -> order_status varchar(20) CHECK (order_status IN('completed','not completed')),
     -> total_amount int);
 Query OK, 0 rows affected (0.02 sec)
 
-mysql> SELECT * from orders;
+mysql> select * from orders;
 Empty set (0.01 sec)
 
 mysql> DESC orders;
@@ -92,11 +92,11 @@ mysql> DESC orders;
 +--------------+-------------+------+-----+---------+-------+
 4 rows in set (0.01 sec)
 
-mysql> DELIMITER /
-mysql> DELIMITER ;
-mysql> ALTER TABLE orders DROP customer_id int unique;
+mysql> delimiter /
+mysql> delimiter ;
+mysql> alter table orders drop customer_id int unique;
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int unique' at line 1
-mysql> ALTER TABLE orders DROP INDEX customer_id;
+mysql> alter table orders drop index customer_id;
 Query OK, 0 rows affected (0.01 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 
@@ -114,20 +114,20 @@ mysql> desc orders;;
 ERROR:
 No query specified
 
-mysql> DELIMITER /
-mysql> CREATE FUNCTION order_sum(int cust int, out total int)
-    ->  RETURNS INT
-    -> NOT DETERMINISTIC
-    -> BEGIN
-    -> IF EXISTS(SELECT 1 FROM orders where customer_id=cust)
-    -> set total = (select sum(total_amount) FROM orders where order_status='completed');
+delimiter /
+mysql> create function order_sum(int cust int, out total int)
+    -> returns int
+    -> not deterministic
+    -> begin
+    -> if exists(select 1 from orders where customer_id=cust)
+    -> set total = (select sum(total_amount) from orders where order_status='completed');
     -> return 1;
     -> end /
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int cust int, out total int)
-        RETURNS INT
-NOT DETERMINISTIC
-BEGIN
-IF EXISTS(SELE' at line 1
+        returns int
+not deterministic
+begin
+if exists(sele' at line 1
 mysql> CREATE FUNCTION order_sum(cust int)
     -> ;
     -> ;
@@ -138,67 +138,67 @@ mysql> CREATE FUNCTION order_sum(cust int)
     -> ;
     -> /
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
-mysql> DELIMITER ;
-mysql> DELIMITER /
-mysql> CREATE FUNCTION order_sum(cust int)
-    -> RETURNS INT
-    -> NOT DETERMINISTIC
-    -> BEGIN
-    -> DECLARE total int;
-    -> IF EXISTS(SELECT 1 FROM orders where customer_id=cust)
-    -> THEN
-    -> SELECT sum(total_amount) INTO total
-    -> FROM orders
+mysql> delimiter ;
+mysql> delimiter /
+mysql> create function order_sum(cust int)
+    -> returns int
+    -> not deterministic
+    -> begin
+    -> declare total int;
+    -> if exists(select 1 from orders where customer_id=cust)
+    -> then
+    -> select sum(total_amount) into total
+    -> from orders
     -> where customer_id=cust
-    -> AND order_status='completed';
-    -> ELSE
-    -> SET total=0;
-    -> END IF;
-    -> RETURN total;
-    -> END /
+    -> and order_status='completed';
+    -> else
+    -> set total=0;
+    -> end if;
+    -> return total;
+    -> end /
 ERROR 1418 (HY000): This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
-mysql> CREATE FUNCTION order_sum(cust int)
-    -> RETURNS INT
-    -> NOT DETERMINISTIC
-    -> READ SQL DATA
-    -> BEGIN
-    -> DECLARE total int;
-    -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
-    -> THEN
-    -> SELECT SUM(total_amount) INTO total
-    -> FROM orders
-    -> WHERE customer_id = cust
-    -> AND order_status = 'completed';
-    -> ELSE
-    -> SET total=0;
-    -> END IF;
-    -> RETURN total;
-    -> END/
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'READ SQL DATA
-BEGIN
-DECLARE total int;
-IF EXISTS (SELECT 1 FROM orders WHERE cus' at line 4
-mysql> CREATE FUNCTION order_sum(cust int)
-    ->     -> RETURNS INT
-    ->     -> NOT DETERMINISTIC
-    ->     -> READS SQL DATA
-    ->     -> BEGIN
-    ->     -> DECLARE total int;
-    ->     -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
-    ->     -> THEN
-    ->     -> SELECT SUM(total_amount) INTO total
-    ->     -> FROM orders
-    ->     -> WHERE customer_id = cust
-    ->     -> AND order_status = 'completed';
-    ->     -> ELSE
-    ->     -> SET total=0;
-    ->     -> END IF;
-    ->     -> RETURN total;
-    ->     -> END/
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> RETURNS INT
-    -> NOT DETERMINISTIC
-    -> READS SQL DATA
-    -> BEGIN
+mysql> create function order_sum(cust int)
+    -> returns int
+    -> not deterministic
+    -> read sql data
+    -> begin
+    -> declare total int;
+    -> if exists (select 1 from orders where customer_id = cust)
+    -> then
+    -> select sum(total_amount) into total
+    -> from orders
+    -> where customer_id = cust
+    -> and order_status = 'completed';
+    -> else
+    -> set total=0;
+    -> end if;
+    -> return total;
+    -> end/
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'read sql data
+begin
+decalare total int;
+if exists (select 1 from orders where cus' at line 4
+mysql> create function order_sum(cust int)
+    -> -> returns int
+    -> -> not deterministic
+    -> -> reads sql data
+    -> -> begin
+    -> -> declare total int;
+    -> -> if exists (select 1 from orders where customer_id = cust)
+    -> -> then
+    -> -> select sum(total_amount) into total
+    -> -> from orders
+    -> -> where customer_id = cust
+    -> -> and order_status = 'completed';
+    -> -> else
+    -> -> set total=0;
+    -> -> end if;
+    -> -> return total;
+    -> -> end/
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> returns int
+    -> not deterministic
+    -> reads sql data
+    -> begin
     -' at line 2
 mysql>
 mysql>
@@ -207,26 +207,26 @@ mysql>
 mysql>
 mysql> -- 2)
 mysql>
-mysql> CREATE FUNCTION order_sum(cust int)
-    -> RETURNS INT
-    -> NOT DETERMINISTIC
-    -> READS SQL DATA
-    -> BEGIN
-    -> DECLARE total int;
-    -> IF EXISTS (SELECT 1 FROM orders WHERE customer_id = cust)
-    -> THEN
-    -> SELECT SUM(total_amount) INTO total
-    -> FROM orders
-    -> WHERE customer_id = cust
-    -> AND order_status = 'completed';
-    -> ELSE
-    -> SET total=0;
-    -> END IF;
-    -> RETURN total;
-    -> END/
+mysql> create function order_sum(cust int)
+    -> returns int
+    -> not deterministic
+    -> reads sql data
+    -> begin
+    -> declare total int;
+    -> if exists (select 1 from orders where customer_id = cust)
+    -> then
+    -> select sum(total_amount) into total
+    -> from orders
+    -> where customer_id = cust
+    -> and order_status = 'completed';
+    -> else
+    -> set total=0;
+    -> end if;
+    -> return total;
+    -> end/
 Query OK, 0 rows affected (0.01 sec)
 
-mysql>  INSERT INTO orders VALUES
+mysql>  insert into orders VALUES
     -> (1,101,'completed',500),
     -> (2,102,'completed',700),
     -> (3,101,'not completed',300),
@@ -241,7 +241,7 @@ mysql>  INSERT INTO orders VALUES
 Query OK, 10 rows affected (0.01 sec)
 Records: 10  Duplicates: 0  Warnings: 0
 
-mysql> DELIMITER ;
+mysql> delimiter ;
 mysql> Select order_sum(101);
 +----------------+
 | order_sum(101) |
