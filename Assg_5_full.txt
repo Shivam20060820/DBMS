@@ -473,12 +473,11 @@ mysql> -- data consolidation
 mysql> select first_name, last_name
     -> from members m
     -> join borrowings b
-    ->     on m.member_id = b.member_id
+    -> on m.member_id = b.member_id
     -> where b.return_date IS NULL
-    ->       and b.borrow_date < CURDATE()
+    -> and b.borrow_date < CURDATE()
     ->
     -> union
-    ->
     -> select first_name, last_name
     -> from employees
     ->
@@ -497,12 +496,11 @@ mysql> select first_name, last_name
 mysql> select first_name, last_name
     -> from members m
     -> join borrowings b
-    ->     on m.member_id = b.member_id
+    -> on m.member_id = b.member_id
     -> where b.return_date is null
-    ->       and b.borrow_date < curdate()
+    -> and b.borrow_date < curdate()
     ->
     -> union
-    ->
     -> select first_name, last_name
     -> from employees
     -> where hire_date <= date_sub(curdate(), interval 10 year);
@@ -510,12 +508,12 @@ Empty set (0.00 sec)
 
 mysql> create view v_top_borrowers as
     -> select
-    ->     concat(m.first_name, ' ', m.last_name) as full_name,
-    ->     m.email,
-    ->     count(b.borrowing_id) as total_books_borrowed
+    -> concat(m.first_name, ' ', m.last_name) as full_name,
+    -> m.email,
+    -> count(b.borrowing_id) as total_books_borrowed
     -> from members m
     -> join borrowings b
-    ->     on m.member_id = b.member_id
+    -> on m.member_id = b.member_id
     -> group by m.member_id, m.first_name, m.last_name, m.email
     -> order by total_books_borrowed desc
     -> limit 15;
