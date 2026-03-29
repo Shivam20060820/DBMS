@@ -197,7 +197,6 @@ mysql> create view project_employee_view as
     -> left join employee e on a.emp_id = e.emp_id
     ->
     -> union
-    ->
     -> select p.proj_name, e.emp_name
     -> from project p
     -> right join assigned_to a on p.project_id = a.project_id
@@ -219,12 +218,9 @@ mysql> select * from project_employee_view;
 5 rows in set (0.00 sec)
 
 mysql> select
-    ->     e.emp_name,
-    ->     p.proj_name,
-    ->     case
-    ->         when e.emp_name = p.chief_arch then 'yes'
-    ->         else 'no'
-    ->     end as is_chief_architect
+    -> e.emp_name,
+    -> p.proj_name,
+    -> if(e.emp_name = p.chief_arch, 'yes', 'no') as is_chief_architect
     -> from employee e
     -> join assigned_to a on e.emp_id = a.emp_id
     -> join project p on a.project_id = p.project_id;
