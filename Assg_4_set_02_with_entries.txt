@@ -50,7 +50,7 @@ mysql> show tables;
 mysql> select* from customer;
 Empty set (0.01 sec)
 
-mysql> INSERT INTO CUSTOMER VALUES
+mysql> insert into customer values
     -> (1, 'Tata Industries', 5000000, 'manufacturer'),
     -> (2, 'Reliance Retail', 3000000, 'retailer'),
     -> (3, 'Infosys Ltd', 4500000, 'manufacturer'),
@@ -72,7 +72,7 @@ mysql> select * from customer
 +---------+-----------------+----------------+--------------+
 5 rows in set (0.00 sec)
 
-mysql> INSERT INTO TRUCK VALUES
+mysql> insert into truck values
     -> (101, 'Ramesh Kumar'),
     -> (102, 'Suresh Patil'),
     -> (103, 'Amit Sharma'),
@@ -93,7 +93,7 @@ mysql> select* from truck;
 +----------+--------------+
 5 rows in set (0.00 sec)
 
-mysql> INSERT INTO CITY VALUES
+mysql> insert into city values
     -> ('Mumbai', 20000000),
     -> ('Delhi', 18000000),
     -> ('Pune', 7000000),
@@ -114,7 +114,7 @@ mysql> select * from city;
 +-----------+------------+
 5 rows in set (0.00 sec)
 
-mysql> INSERT INTO SHIPMENT VALUES
+mysql> insert into shipment values
     -> (1001, 1, 1200, 101, 'Mumbai', '2026-01-10'),
     -> (1002, 2, 800, 102, 'Delhi', '2026-01-15'),
     -> (1003, 3, 1500, 103, 'Pune', '2026-02-01'),
