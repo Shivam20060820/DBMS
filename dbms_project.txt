@@ -1,0 +1,237 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\WINDOWS\system32> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use dbms_project
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_dbms_project |
++------------------------+
+| case_details           |
+| criminal               |
+| evidence               |
+| fir                    |
+| investigating_officer  |
+| jail                   |
+| jail_records           |
+| police_station         |
+| victim                 |
++------------------------+
+9 rows in set (0.00 sec)
+
+mysql> desc case_details;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| case_id        | int         | NO   | PRI | NULL    |       |
+| fir_id         | int         | YES  | UNI | NULL    |       |
+| judgement      | text        | YES  |     | NULL    |       |
+| case_status    | varchar(20) | YES  |     | NULL    |       |
+| filing_date    | date        | YES  |     | NULL    |       |
+| judgement_date | date        | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> desc ciminal;
+ERROR 1146 (42S02): Table 'dbms_project.ciminal' doesn't exist
+mysql> desc criminal;
++---------------------+-------------+------+-----+---------+-------+
+| Field               | Type        | Null | Key | Default | Extra |
++---------------------+-------------+------+-----+---------+-------+
+| cri_id              | int         | NO   | PRI | NULL    |       |
+| name                | varchar(30) | NO   |     | NULL    |       |
+| gender              | varchar(10) | YES  |     | NULL    |       |
+| date_of_birth       | date        | YES  |     | NULL    |       |
+| status              | varchar(30) | YES  |     | NULL    |       |
+| identification_mark | varchar(30) | YES  |     | NULL    |       |
+| address             | varchar(30) | YES  |     | NULL    |       |
++---------------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc evidence;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| evidence_id    | int         | NO   | PRI | NULL    |       |
+| fir_id         | int         | YES  | MUL | NULL    |       |
+| evidence_type  | varchar(30) | YES  |     | NULL    |       |
+| description    | text        | YES  |     | NULL    |       |
+| collected_date | date        | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc fir;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| fir_id      | int         | NO   | PRI | NULL    |       |
+| fir_no      | varchar(20) | NO   | UNI | NULL    |       |
+| fir_date    | date        | NO   |     | NULL    |       |
+| ps_id       | int         | YES  | MUL | NULL    |       |
+| cri_id      | int         | YES  | MUL | NULL    |       |
+| crime_type  | varchar(80) | YES  |     | NULL    |       |
+| description | text        | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc investigating_officer;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| officer_id   | int         | NO   | PRI | NULL    |       |
+| badge_no     | varchar(20) | NO   | UNI | NULL    |       |
+| name         | varchar(30) | NO   |     | NULL    |       |
+| officer_rank | varchar(30) | YES  |     | NULL    |       |
+| contact_no   | varchar(15) | YES  |     | NULL    |       |
+| ps_id        | int         | YES  | MUL | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> desc jail;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| jail_id  | int         | NO   | PRI | NULL    |       |
+| name     | varchar(50) | NO   |     | NULL    |       |
+| capacity | int         | YES  |     | NULL    |       |
+| location | varchar(80) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc jail_records;
++-------------------+------+------+-----+---------+-------+
+| Field             | Type | Null | Key | Default | Extra |
++-------------------+------+------+-----+---------+-------+
+| record_id         | int  | NO   | PRI | NULL    |       |
+| cri_id            | int  | YES  | MUL | NULL    |       |
+| jail_id           | int  | YES  | MUL | NULL    |       |
+| entry_date        | date | YES  |     | NULL    |       |
+| release_date      | date | YES  |     | NULL    |       |
+| sentence_duration | int  | YES  |     | NULL    |       |
++-------------------+------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> desc police_station;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ps_id     | int         | NO   | PRI | NULL    |       |
+| name      | varchar(30) | NO   |     | NULL    |       |
+| district  | varchar(30) | YES  |     | NULL    |       |
+| state     | varchar(30) | YES  |     | NULL    |       |
+| contactno | varchar(15) | YES  | UNI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc victim;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| victim_id      | int         | NO   | PRI | NULL    |       |
+| fir_id         | int         | YES  | MUL | NULL    |       |
+| name           | varchar(30) | YES  |     | NULL    |       |
+| address        | varchar(80) | YES  |     | NULL    |       |
+| contact_no     | varchar(20) | YES  | UNI | NULL    |       |
+| injury_details | text        | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select * from case_details;
++---------+--------+---------------------+-------------+-------------+----------------+
+| case_id | fir_id | judgement           | case_status | filing_date | judgement_date |
++---------+--------+---------------------+-------------+-------------+----------------+
+|     201 |    101 | Pending             | Ongoing     | 2025-12-02  | NULL           |
+|     202 |    102 | Under Investigation | Ongoing     | 2025-12-06  | NULL           |
+|     203 |    103 | Closed with fine    | Closed      | 2025-12-11  | 2025-12-20     |
++---------+--------+---------------------+-------------+-------------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from criminal;
++--------+--------------+--------+---------------+-------------+---------------------+---------+
+| cri_id | name         | gender | date_of_birth | status      | identification_mark | address |
++--------+--------------+--------+---------------+-------------+---------------------+---------+
+|      1 | Rohit Verma  | Male   | 1995-06-15    | Arrested    | Scar on left cheek  | Mumbai  |
+|      2 | Sneha Sharma | Female | 1998-09-22    | Under Trial | Tattoo on wrist     | Delhi   |
+|      3 | Vikram Singh | Male   | 1990-12-10    | Released    | Burn mark on hand   | Pune    |
++--------+--------------+--------+---------------+-------------+---------------------+---------+
+3 rows in set (0.01 sec)
+
+mysql> select * from evidence;
++-------------+--------+----------------+------------------------+----------------+
+| evidence_id | fir_id | evidence_type  | description            | collected_date |
++-------------+--------+----------------+------------------------+----------------+
+|         401 |    101 | CCTV Footage   | Video from nearby shop | 2025-12-01     |
+|         402 |    102 | Bank Statement | Transaction proof      | 2025-12-05     |
+|         403 |    103 | Weapon         | Knife used in assault  | 2025-12-10     |
++-------------+--------+----------------+------------------------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from investigating officer;
+ERROR 1146 (42S02): Table 'dbms_project.investigating' doesn't exist
+mysql> select * from investigating_officer;
++------------+----------+---------------------+---------------+------------+-------+
+| officer_id | badge_no | name                | officer_rank  | contact_no | ps_id |
++------------+----------+---------------------+---------------+------------+-------+
+|          1 | B123     | Inspector Raj Verma | Inspector     | 9001112233 |     1 |
+|          2 | B456     | SI Neha Singh       | Sub Inspector | 9011122233 |     2 |
+|          3 | B789     | ACP Arjun Patil     | ACP           | 9022233445 |     3 |
++------------+----------+---------------------+---------------+------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from jail;
++---------+------------------+----------+----------+
+| jail_id | name             | capacity | location |
++---------+------------------+----------+----------+
+|       1 | Tihar Jail       |     5000 | Delhi    |
+|       2 | Yerwada Jail     |     3000 | Pune     |
+|       3 | Arthur Road Jail |     2500 | Mumbai   |
++---------+------------------+----------+----------+
+3 rows in set (0.01 sec)
+
+mysql> select * from jail_records;
++-----------+--------+---------+------------+--------------+-------------------+
+| record_id | cri_id | jail_id | entry_date | release_date | sentence_duration |
++-----------+--------+---------+------------+--------------+-------------------+
+|       501 |      1 |       1 | 2025-12-02 | NULL         |               180 |
+|       502 |      2 |       2 | 2025-12-06 | NULL         |               365 |
+|       503 |      3 |       3 | 2025-12-12 | 2025-12-20   |                30 |
++-----------+--------+---------+------------+--------------+-------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from police_station;
++-------+--------------------------------+-----------------+-------------+------------+
+| ps_id | name                           | district        | state       | contactno  |
++-------+--------------------------------+-----------------+-------------+------------+
+|     1 | Andheri Police Station         | Mumbai Suburban | Maharashtra | 9876543210 |
+|     2 | Connaught Place Police Station | New Delhi       | Delhi       | 9123456780 |
+|     3 | Shivajinagar Police Station    | Pune            | Maharashtra | 9988776655 |
++-------+--------------------------------+-----------------+-------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from victim;
++-----------+--------+--------------+---------+------------+----------------+
+| victim_id | fir_id | name         | address | contact_no | injury_details |
++-----------+--------+--------------+---------+------------+----------------+
+|       301 |    101 | Rahul Mehta  | Mumbai  | 9111223344 | Minor injuries |
+|       302 |    102 | Priya Sharma | Delhi   | 9222334455 | Financial loss |
+|       303 |    103 | Amit Joshi   | Pune    | 9333445566 | Head injury    |
++-----------+--------+--------------+---------+------------+----------------+
+3 rows in set (0.01 sec)
+
+mysql>
