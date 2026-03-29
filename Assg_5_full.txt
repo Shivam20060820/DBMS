@@ -470,17 +470,17 @@ mysql>
 mysql>
 mysql> -- 4 fourth 4th question
 mysql> -- data consolidation
-mysql> SELECT first_name, last_name
-    -> FROM members m
-    -> JOIN borrowings b
-    ->     ON m.member_id = b.member_id
-    -> WHERE b.return_date IS NULL
-    ->       AND b.borrow_date < CURDATE()
+mysql> select first_name, last_name
+    -> from members m
+    -> join borrowings b
+    ->     on m.member_id = b.member_id
+    -> where b.return_date IS NULL
+    ->       and b.borrow_date < CURDATE()
     ->
-    -> UNION
+    -> union
     ->
-    -> SELECT first_name, last_name
-    -> FROM employees
+    -> select first_name, last_name
+    -> from employees
     ->
     -> ;
 +------------+-----------+
