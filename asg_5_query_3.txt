@@ -1,0 +1,367 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\WINDOWS\system32> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass7               |
+| ass7_2             |
+| ass7_final         |
+| dbms_project       |
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| product_ship       |
+| resumelens         |
+| sakila             |
+| set_01_ass_4       |
+| shivam_banking     |
+| sys                |
+| world              |
++--------------------+
+15 rows in set (0.01 sec)
+
+mysql> use ass7_2
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_ass7_2 |
++------------------+
+| orders           |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> show functions;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'functions' at line 1
+mysql> create function order_sum(cust int)
+    ->     -> returns int
+    ->     -> not deterministic
+    ->     -> reads sql data
+    ->     -> begin
+    ->     -> declare total int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> returns int
+    -> not deterministic
+    -> reads sql data
+    -> begin
+    -' at line 2
+mysql>     -> if exists (select 1 from orders where customer_id = cust)
+    ->     -> then
+    ->     -> select sum(total_amount) into total
+    ->     -> from orders
+    ->     -> where customer_id = cust
+    ->     -> and order_status = 'completed';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> if exists (select 1 from orders where customer_id = cust)
+    -> then
+    -> ' at line 1
+mysql>     -> else
+    ->     -> set total=0;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> else
+    -> set total=0' at line 1
+mysql>     -> end if;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> end if' at line 1
+mysql>     -> return total;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> return total' at line 1
+mysql>     -> end/
+    -> /
+    -> //
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> end/
+/
+//' at line 1
+mysql> delimiter /
+mysql> create function order_sum(cust int)
+    -> returns int
+    -> not deterministic
+    -> reads sql data
+    -> begin
+    -> declare total int;
+    -> if exists (select 1 from orders where customer_id = cust)
+    -> then
+    -> select sum(total_amount) into total
+    -> from orders
+    -> where customer_id = cust
+    -> and order_status = 'completed';
+    -> else
+    -> set total=0;
+    -> end if;
+    -> return total;
+    -> end/
+ERROR 1304 (42000): FUNCTION order_sum already exists
+mysql> select * from orders;
+    -> /
++----------+-------------+---------------+--------------+
+| order_id | customer_id | order_status  | total_amount |
++----------+-------------+---------------+--------------+
+|        1 |         101 | completed     |          500 |
+|        2 |         102 | completed     |          700 |
+|        3 |         101 | not completed |          300 |
+|        4 |         103 | completed     |          900 |
+|        5 |         104 | not completed |          450 |
+|        6 |         102 | completed     |          650 |
+|        7 |         105 | completed     |          800 |
+|        8 |         101 | completed     |          550 |
+|        9 |         103 | not completed |          200 |
+|       10 |         104 | completed     |          750 |
++----------+-------------+---------------+--------------+
+10 rows in set (0.01 sec)
+
+mysql> delimiter/
+ERROR:
+DELIMITER must be followed by a 'delimiter' character or string
+mysql> delimiter ;
+mysql> select order_sum(104);
++----------------+
+| order_sum(104) |
++----------------+
+|            750 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select order_sum(103);
++----------------+
+| order_sum(103) |
++----------------+
+|            900 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ass7               |
+| ass7_2             |
+| ass7_final         |
+| dbms_project       |
+| information_schema |
+| library            |
+| mysql              |
+| performance_schema |
+| product_ship       |
+| resumelens         |
+| sakila             |
+| set_01_ass_4       |
+| shivam_banking     |
+| sys                |
+| world              |
++--------------------+
+15 rows in set (0.00 sec)
+
+mysql> use library;
+Database changed
+mysql> show tables;
++----------------------------------------+
+| Tables_in_library                      |
++----------------------------------------+
+| books                                  |
+| borrowings                             |
+| employees                              |
+| genre_popularity                       |
+| genre_popularity_without_500_condition |
+| members                                |
+| report_last_year                       |
+| v_top_borrowers                        |
++----------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT
+    ->     CONCAT(e.first_name, ' ', e.last_name) AS full_name,
+    ->     e.position
+    -> FROM employees e
+    -> JOIN borrowings b ON e.employee_id = b.employee_id
+    -> WHERE b.member_id IN (
+    ->     SELECT member_id
+    ->     FROM borrowings
+    ->     GROUP BY member_id
+    ->     HAVING COUNT(*) > (
+    ->         SELECT AVG(borrow_count)
+    ->         FROM (
+    ->             SELECT COUNT(*) AS borrow_count
+    ->             FROM borrowings
+    ->             GROUP BY member_id
+    ->         ) AS avg_table
+    ->     )
+    -> );
+ERROR 1054 (42S22): Unknown column 'b.employee_id' in 'on clause'
+mysql> create view top_members as
+    -> select distinct
+    ->     concat(m.first_name,' ',m.last_name) as full_name,
+    ->     m.email
+    -> from members m
+    -> join borrowings br on m.member_id = br.member_id
+    -> where br.member_id in (
+    ->     select member_id
+    ->     from borrowings
+    ->     group by member_id
+    ->     having count(*) > (
+    ->         select avg(cnt)
+    ->         from (
+    ->             select count(*) as cnt
+    ->             from borrowings
+    ->             group by member_id
+    ->         ) as temp
+    ->     )
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from top_members;
+Empty set (0.01 sec)
+
+mysql> alter table borrowings add employee_id int;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table borrowings
+    -> add constraint fk_employee
+    -> foreign key (employee_id) references employees(employee_id);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from borrowings;
++--------------+-----------+---------+-------------+-------------+-------------+
+| borrowing_id | member_id | book_id | borrow_date | return_date | employee_id |
++--------------+-----------+---------+-------------+-------------+-------------+
+|         1001 |         1 |     101 | 2024-01-10  | 2024-01-20  |        NULL |
+|         1002 |         2 |     103 | 2024-02-05  | 2024-02-15  |        NULL |
+|         1003 |         3 |     102 | 2024-03-12  | 2024-03-22  |        NULL |
+|         1004 |         4 |     104 | 2024-04-01  | 2024-04-10  |        NULL |
+|         1005 |         5 |     105 | 2024-05-18  | 2024-05-29  |        NULL |
++--------------+-----------+---------+-------------+-------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> show tables;
++----------------------------------------+
+| Tables_in_library                      |
++----------------------------------------+
+| books                                  |
+| borrowings                             |
+| employees                              |
+| genre_popularity                       |
+| genre_popularity_without_500_condition |
+| members                                |
+| report_last_year                       |
+| top_members                            |
+| v_top_borrowers                        |
++----------------------------------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employees;
++-------------+------------+-----------+------------+---------------------+
+| employee_id | first_name | last_name | hire_date  | position            |
++-------------+------------+-----------+------------+---------------------+
+|         201 | raj        | kulkarni  | 2022-01-10 | librarian           |
+|         202 | anita      | desai     | 2022-06-15 | assistant librarian |
+|         203 | vikram     | singh     | 2023-02-20 | clerk               |
+|         204 | pooja      | nair      | 2023-08-12 | accountant          |
+|         205 | manish     | gupta     | 2024-01-05 | manager             |
++-------------+------------+-----------+------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> update borrowings set employee_id = 201 where borrowing_id = 1001;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update borrowings set employee_id = 202 where borrowing_id = 1002;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update borrowings set employee_id = 203 where borrowing_id = 1003;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update borrowings set employee_id = 204 where borrowing_id = 1004;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update borrowings set employee_id = 205 where borrowing_id = 1005;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from borrowings;
++--------------+-----------+---------+-------------+-------------+-------------+
+| borrowing_id | member_id | book_id | borrow_date | return_date | employee_id |
++--------------+-----------+---------+-------------+-------------+-------------+
+|         1001 |         1 |     101 | 2024-01-10  | 2024-01-20  |         201 |
+|         1002 |         2 |     103 | 2024-02-05  | 2024-02-15  |         202 |
+|         1003 |         3 |     102 | 2024-03-12  | 2024-03-22  |         203 |
+|         1004 |         4 |     104 | 2024-04-01  | 2024-04-10  |         204 |
+|         1005 |         5 |     105 | 2024-05-18  | 2024-05-29  |         205 |
++--------------+-----------+---------+-------------+-------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> drop top_employees;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'top_employees' at line 1
+mysql> show tables;
++----------------------------------------+
+| Tables_in_library                      |
++----------------------------------------+
+| books                                  |
+| borrowings                             |
+| employees                              |
+| genre_popularity                       |
+| genre_popularity_without_500_condition |
+| members                                |
+| report_last_year                       |
+| top_members                            |
+| v_top_borrowers                        |
++----------------------------------------+
+9 rows in set (0.00 sec)
+
+mysql> create view top_employees as
+    -> select distinct
+    -> concat(e.first_name,' ',e.last_name) as full_name,
+    -> e.position
+    -> from employees e
+    -> join borrowings br on e.employee_id = br.employee_id
+    -> where br.member_id in (
+    -> select member_id
+    -> from borrowings
+    -> group by member_id
+    -> having count(*) > (
+    -> select avg(cnt)
+    -> from (
+    -> select count(*) as cnt
+    -> from borrowings
+    -> group by member_id
+    -> ) as temp
+    -> )
+    -> );
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *from top_employees;
+Empty set (0.00 sec)
+
+mysql> insert into borrowings values (1006,1,102,'2024-06-01','2024-06-10',201);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into borrowings values (1007,1,103,'2024-06-15','2024-06-25',202);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from top_employees;
++--------------+---------------------+
+| full_name    | position            |
++--------------+---------------------+
+| raj kulkarni | librarian           |
+| anita desai  | assistant librarian |
++--------------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql>
