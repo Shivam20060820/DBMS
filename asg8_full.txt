@@ -221,11 +221,11 @@ mysql> create trigger update_book_sold
     -> after update on book
     -> for each row
     -> begin
-    ->
-    -> update author a
-    -> join writing w on a.name=w.name
-    -> set a.soldcopies=new.soldcopies
-    -> where w.isbn=new.isbn;
+    -> update author
+    -> set soldcopies = new.soldcopies
+    -> where name in (
+    -> select name from writing where isbn = new.isbn
+    -> );
     -> end//
 Query OK, 0 rows affected (0.01 sec)
 
