@@ -1,0 +1,842 @@
+Last login: Wed Apr  1 09:21:46 on ttys000
+vyaas121@VY030-01 ~ % mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+Server version: 9.3.0-commercial MySQL Enterprise Server - Commercial
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE TABLE student 
+    -> ;
+ERROR 1046 (3D000): No database selected
+mysql> Select db test
+    -> 
+    -> ;
+ERROR 1054 (42S22): Unknown column 'db' in 'field list'
+mysql> USE test
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create table student {}
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '{}' at line 1
+mysql> create table student {id int primary key,name varcahr(50)};
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '{id int primary key,name varcahr(50)}' at line 1
+mysql> CREATE TABLE STUDENT(ID INT PRIMARY KEY,NAME VARCHAR(50));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE AVG_MARKS(ID INT PRIMARY KEY,AVG_MARKS FLOAT);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DEMILITER//
+    -> CREATE TRIGGER after_student_insert
+    -> AFTER INSERT ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    -> --CLEAR OLD AVERAGE
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DEMILITER//
+CREATE TRIGGER after_student_insert
+AFTER INSERT ON student
+FOR EACH' at line 1
+mysql> DEMILITER //
+    -> CREATE TRIGGER prevent_negative_stock
+    -> BEFORE INSERT OR UPDATE ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    -> IF NEW ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DEMILITER //
+CREATE TRIGGER prevent_negative_stock
+BEFORE INSERT OR UPDATE ON st' at line 1
+mysql> 
+Display all 795 possibilities? (y or n) 
+mysql> 
+Display all 795 possibilities? (y or n) 
+mysql> DELIMITER //
+mysql> CREATE TRIGGER prevent_negative_stock
+    -> BEFORE INSERT IR UPDATE ON student 
+    -> FOR EACH ROW 
+    -> BEGIN
+    -> IF NEW.QUALITY<0 THEN
+    -> SIGNAL SQLSTATE '4500'
+    -> SET MESSAGE_TEXT='Entered Value Cannot Be Empty/Negative'
+    -> END IF;
+    -> END;
+    -> DELIMITER
+    -> DELIMITER;
+    -> ;
+    -> 
+    -> DELIMITER //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IR UPDATE ON student 
+FOR EACH ROW 
+BEGIN
+IF NEW.QUALITY<0 THEN
+SIGNAL SQLSTATE ' at line 2
+mysql> 
+mysql> CREATE TRIGGER prevent_negative_stock
+    -> BEFORE INSERT ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.marks < 0 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Entered Value Cannot Be Negative';
+    ->     END IF;
+    -> END //
+ERROR 1054 (42S22): Unknown column 'marks' in 'NEW'
+mysql> 
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql> 
+mysql> CREATE TRIGGER prevent_negative_stock
+    -> BEFORE INSERT ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.marks < 0 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Entered Value Cannot Be Negative';
+    ->     END IF;
+    -> END //
+ERROR 1054 (42S22): Unknown column 'marks' in 'NEW'
+mysql> 
+mysql> DELIMITER ;
+mysql> ALTER TABLE STUDENT ADD marks INT;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER //
+mysql> 
+mysql> CREATE TRIGGER prevent_negative_stock
+    -> BEFORE INSERT ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.marks < 0 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Entered Value Cannot Be Negative';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql> DELIMITER //
+mysql> 
+mysql> CREATE TRIGGER before_student_update
+    -> BEFORE UPDATE ON student
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.marks < 0 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Marks cannot be negative';
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> SELECT * FROM student;
+Empty set (0.00 sec)
+
+mysql> UPDATE student
+    -> SET marks = -10
+    -> WHERE marks = 80;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| abhiram            |
+| akk                |
+| assignment         |
+| comp               |
+| comp1              |
+| company            |
+| d1                 |
+| d16                |
+| db1                |
+| department         |
+| emp                |
+| emp1               |
+| employee           |
+| hnu                |
+| Hospita1           |
+| hospital           |
+| hotel_info         |
+| Hotel_MS           |
+| information_schema |
+| lab                |
+| mit                |
+| mysql              |
+| newemployee        |
+| office             |
+| performance_schema |
+| shivam12           |
+| stud               |
+| sys                |
+| test               |
+| university         |
+| workl              |
+| X                  |
++--------------------+
+32 rows in set (0.05 sec)
+
+mysql> create database shivam_cur;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use shivam_cur;
+Database changed
+mysql> create table emp(id int, name varchar(10),sal int, dept_id int)
+    -> ;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into emp values(1,"shivam",1000,101);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into emp values(2,"ishaan",2000,102);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp values(3,"harshal",3000,103);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp values(4,"akhi",4000,104);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise(in amount double)
+    -> begin
+    -> declare done int default 0;
+    -> declare eid in int;
+    -> declare emprec cursor for select id,sal from emp
+    -> ;
+    -> declare continue handler for int not found set done = 1;
+    -> open emprec;
+    -> repeat
+    -> fetch emprec into id,sal;
+    -> update emp
+    -> set sal=sal+round(sal*amount)
+    -> where id=eid;
+    -> until done
+    -> end repeat
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in int;
+declare emprec cursor for select id,sal from emp
+;
+declare continue hand' at line 4
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare emprec cursor for select id,sal from emp ; declare continue handler for int not found set done = 1; open emprec; repeat fetch emprec into id,sal; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int not found set done = 1; open emprec; repeat fetch emprec into id,sal; update' at line 1
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare emprec cursor for select id,sal from emp ; declare continue handler for not found set done = 1; open emprec; repeat fetch emprec into id,sal; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat end//
+ERROR 1327 (42000): Undeclared variable: id
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare emprec cursor for select id,sal from emp ; declare continue handler for not found set done = 1; open emprec; repeat fetch emprec into eid,sal; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat end//
+ERROR 1327 (42000): Undeclared variable: sal
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare salary int; declare emprec c
+ursor for select id,sal from emp ; declare continue handler for not found set done = 1; open emprec; repeat fetch emprec into eid,salary; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end' at line 1
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare salary int; declare emprec cursor for select id,sal from emp ; declare continue handler for not found set done = 1; open emprec; repeat fetch emprec into eid,salary; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end' at line 1
+mysql> create procedure giveraise(in amount double) begin declare done int default 0; declare eid int; declare salary int; declare emprec cursor for select id,sal from emp ; declare continue handler for not found set done = 1; open emprec; repeat fetch emprec into eid,salary; update emp set sal=sal+round(sal*amount) where id=eid; until done end repeat; end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call giveraise(1,2);
+    -> //
+ERROR 1318 (42000): Incorrect number of arguments for PROCEDURE shivam_cur.giveraise; expected 1, got 2
+mysql> call giveraise(1);
+    -> ;
+    -> //
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
+    -> //
++------+---------+-------+---------+
+| id   | name    | sal   | dept_id |
++------+---------+-------+---------+
+|    1 | shivam  |  2000 |     101 |
+|    2 | ishaan  |  4000 |     102 |
+|    3 | harshal |  6000 |     103 |
+|    4 | akhi    | 16000 |     104 |
++------+---------+-------+---------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_person(in amount double, in person int)
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for int not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    ->     update emp
+    ->     set sal=sal+round(sal*amount)
+    ->     where id=person;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int not found set done = 1;
+    open emprec;
+    repeat
+    fetch emprec into ei' at line 7
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_person(in amount double, in person int)
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    ->     update emp
+    ->     set sal=sal+round(sal*amount)
+    ->     where id=person;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call giveraise_person(2,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from emp;
++------+---------+--------+---------+
+| id   | name    | sal    | dept_id |
++------+---------+--------+---------+
+|    1 | shivam  | 486000 |     101 |
+|    2 | ishaan  |   4000 |     102 |
+|    3 | harshal |   6000 |     103 |
+|    4 | akhi    |  16000 |     104 |
++------+---------+--------+---------+
+4 rows in set (0.01 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn(in amount double)
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if sal>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'done
+    end repeat;
+    end' at line 19
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn(in amount double)
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if sal>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    -> end if
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'until done
+    end repeat;
+    end' at line 20
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn(in amount double)
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if sal>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;select*from emp;
+mysql> delimiter ;
+mysql> select*from emp;
++------+---------+--------+---------+
+| id   | name    | sal    | dept_id |
++------+---------+--------+---------+
+|    1 | shivam  | 486000 |     101 |
+|    2 | ishaan  |   4000 |     102 |
+|    3 | harshal |   6000 |     103 |
+|    4 | akhi    |  16000 |     104 |
++------+---------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> drop procedure giveraise_condn;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if sal>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call giveraise_condn();
+ERROR 1054 (42S22): Unknown column 'sal' in 'field list'
+mysql> delimiter //
+mysql> create procedure giveraise_condn()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if salary>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1304 (42000): PROCEDURE giveraise_condn already exists
+mysql> delimiter ;
+mysql> drop procedure giveraise_condn;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare eid int;
+    ->    declare salary int;
+    ->     declare emprec cursor for select id,sal from emp ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into eid,salary;
+    -> if salary>100000 then
+    ->     update emp
+    ->     set sal=sal+sal*0.05
+    ->     where id=eid;
+    -> else
+    -> update emp
+    ->     set sal=sal+sal*0.1
+    ->     where id=eid;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call giveraise_condn();
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++------+---------+--------+---------+
+| id   | name    | sal    | dept_id |
++------+---------+--------+---------+
+|    1 | shivam  | 510300 |     101 |
+|    2 | ishaan  |   4400 |     102 |
+|    3 | harshal |   6600 |     103 |
+|    4 | akhi    |  19360 |     104 |
++------+---------+--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> create table employee(e_no int,first_name varchar(20),age int,grade varchar(30),sal int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare cur_e_no int;
+    ->    declare cur_grade int;
+    ->     declare emprec cursor for select e_no, grade from emp2 ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = ‘Asst Prof’ then
+    ->     update emp2
+    ->     set sal=sal+10000
+    ->    -- where cur_en_no=e_no;
+    -> else if cur_grade=‘Associate Prof’ then
+    -> update emp2
+    ->     set sal=sal+20000
+    ->     —where cur_en_no=e_no;
+    -> else if cur_grade=‘Professor’ then
+    -> update emp2
+    ->     set sal=sal+30000
+    ->     --where cur_en_no=e_no;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Prof’ then
+    update emp2
+    set sal=sal+10000
+   
+else if cur_grade=‘Asso' at line 11
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare cur_e_no int;
+    ->    declare cur_grade int;
+    ->     declare emprec cursor for select e_no, grade from emp2 ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = ‘Asst Prof’ then
+    ->     update emp2
+    ->     set sal=sal+10000
+    ->    -- where cur_en_no=e_no;
+    -> else if cur_grade=‘Associate Prof’ then
+    -> update emp2
+    ->     set sal=sal+20000
+    ->     -- where cur_en_no=e_no;
+    -> else if cur_grade=‘Professor’ then
+    -> update emp2
+    ->     set sal=sal+30000
+    ->     --where cur_en_no=e_no;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Prof’ then
+    update emp2
+    set sal=sal+10000
+   
+else if cur_grade=‘Asso' at line 11
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare cur_e_no int;
+    ->    declare cur_grade int;
+    ->     declare emprec cursor for select e_no, grade from emp2 ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = ‘Asst Prof’ then
+    ->     update emp2
+    ->     set sal=sal+10000;
+    ->    -- where cur_en_no=e_no;
+    -> else if cur_grade=‘Associate Prof’ then
+    -> update emp2
+    ->     set sal=sal+20000;
+    ->     -- where cur_en_no=e_no;
+    -> else if cur_grade=‘Professor’ then
+    -> update emp2
+    ->     set sal=sal+30000;
+    ->     --where cur_en_no=e_no;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Prof’ then
+    update emp2
+    set sal=sal+10000;
+   
+else if cur_grade=‘Ass' at line 11
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    ->     begin
+    ->    declare done int default 0;
+    ->    declare cur_e_no int;
+    ->    declare cur_grade int;
+    ->     declare emprec cursor for select e_no, grade from emp2 ;
+    ->     declare continue handler for not found set done = 1;
+    ->     open emprec;
+    ->     repeat
+    ->     fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = ‘Asst Prof’ then
+    ->     update emp2
+    ->     set sal=sal+10000
+    ->    where cur_en_no=e_no;
+    -> else if cur_grade=‘Associate Prof’ then
+    -> update emp2
+    ->     set sal=sal+20000
+    ->     where cur_en_no=e_no;
+    -> else if cur_grade=‘Professor’ then
+    -> update emp2
+    ->     set sal=sal+30000
+    ->     where cur_en_no=e_no;
+    -> end if;
+    ->     until done
+    ->     end repeat;
+    ->     end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Prof’ then
+    update emp2
+    set sal=sal+10000
+   where cur_en_no=e_no;
+else' at line 11
+mysql> delimiter ;
+mysql> DELIMITER //
+mysql> 
+mysql> CREATE PROCEDURE giveraise_condn_grade()
+    -> BEGIN
+    ->     DECLARE done INT DEFAULT 0;
+    ->     DECLARE cur_e_no INT;
+    ->     DECLARE cur_grade VARCHAR(50); -- Must be VARCHAR to hold titles
+    ->     
+    ->     DECLARE emprec CURSOR FOR SELECT e_no, grade FROM emp2;
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    -> 
+    ->     OPEN emprec;
+    -> 
+    ->     read_loop: LOOP
+    ->         FETCH emprec INTO cur_e_no, cur_grade;
+    ->         
+    ->         IF done THEN 
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         IF cur_grade = 'Asst Prof' THEN
+    ->             UPDATE emp2 SET sal = sal + 10000 WHERE e_no = cur_e_no;
+    ->         ELSEIF cur_grade = 'Associate Prof' THEN
+    ->             UPDATE emp2 SET sal = sal + 20000 WHERE e_no = cur_e_no;
+    ->         ELSEIF cur_grade = 'Professor' THEN
+    ->             UPDATE emp2 SET sal = sal + 30000 WHERE e_no = cur_e_no;
+    ->         END IF;
+    ->         
+    ->     END LOOP;
+    -> 
+    ->     CLOSE emprec;
+    -> END //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> drop procedure giveraise_condn_grade;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> 
+mysql> create procedure giveraise_condn_grade()
+    -> begin
+    ->     declare done int default 0;
+    ->     declare cur_e_no int;
+    ->     declare cur_grade varchar(50); -- Changed to varchar to accept text
+    ->     declare emprec cursor for select e_no, grade from emp2;
+    ->     declare continue handler for not found set done = 1;
+    -> 
+    ->     open emprec;
+    ->     
+    ->     repeat
+    ->         fetch emprec into cur_e_no, cur_grade;
+    ->         
+    ->         if not done then
+    ->             if cur_grade = 'Asst Prof' then
+    ->                 update emp2
+    ->                 set sal = sal + 10000
+    ->                 where e_no = cur_e_no;
+    ->             elseif cur_grade = 'Associate Prof' then
+    ->                 update emp2
+    ->                 set sal = sal + 20000
+    ->                 where e_no = cur_e_no;
+    ->             elseif cur_grade = 'Professor' then
+    ->                 update emp2
+    ->                 set sal = sal + 30000
+    ->                 where e_no = cur_e_no;
+    ->             end if;
+    ->         end if;
+    ->         
+    ->     until done
+    ->     end repeat;
+    -> 
+    ->     close emprec;
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    -> begin
+    -> declare done int default 0;
+    -> declare cur_e_no int;
+    -> declare cur_grade varchar(50);
+    -> declare emprec cursor for select e_no, grade from emp2 ;
+    -> declare continue handler for not found set done = 1;
+    -> open emprec;
+    -> repeat
+    -> fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = 'Asst Prof' then
+    -> update emp2
+    -> set sal=sal+10000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Associate Prof' then
+    -> update emp2
+    -> set sal=sal+20000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Professor' then
+    -> update emp2
+    -> set sal=sal+30000
+    -> where e_no=cur_e_no;
+    -> end if;
+    -> until done
+    -> end repeat;
+    -> close emprec;
+    -> end//
+ERROR 1304 (42000): PROCEDURE giveraise_condn_grade already exists
+mysql> delimiter ;
+mysql> drop procedure giveraise_condn_grade;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    -> begin
+    -> declare done int default 0;
+    -> declare cur_e_no int;
+    -> declare cur_grade varchar(50);
+    -> declare emprec cursor for select e_no, grade from emp2 ;
+    -> declare continue handler for not found set done = 1;
+    -> open emprec;
+    -> repeat
+    -> fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = 'Asst Prof' then
+    -> update emp2
+    -> set sal=sal+10000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Associate Prof' then
+    -> update emp2
+    -> set sal=sal+20000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Professor' then
+    -> update emp2
+    -> set sal=sal+30000
+    -> where e_no=cur_e_no;
+    -> end if;
+    -> until done
+    -> end repeat;
+    -> close emprec;
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> 
+mysql> insert into employee(e_no, first_name, age, grade, sal) values
+    -> (101, 'Alice', 30, 'Asst Prof', 50000),
+    -> (102, 'Bob', 40, 'Associate Prof', 80000),
+    -> (103, 'Charlie', 52, 'Professor', 120000),
+    -> (104, 'Diana', 38, 'Associate Prof', 85000),
+    -> (105, 'Eve', 28, 'Lecturer', 40000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> truncate table emp2;
+ERROR 1146 (42S02): Table 'shivam_cur.emp2' doesn't exist
+mysql> create table emp2(e_no int,first_name varchar(20),age int,grade varchar(30),sal int);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into emp2(e_no, first_name, age, grade, sal) values
+    -> (1, 'shivam', 29, 'Asst Prof', 60000),
+    -> (2, 'ishaan', 35, 'Associate Prof', 85000),
+    -> (3, 'ajhi', 45, 'Professor', 110000),
+    -> (4, 'harshal', 32, 'Asst Prof', 62000),
+    -> (5, 'chinu', 40, 'Associate Prof', 88000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> call giveraise_condn_grade();
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from emp2;
++------+------------+------+----------------+--------+
+| e_no | first_name | age  | grade          | sal    |
++------+------------+------+----------------+--------+
+|    1 | shivam     |   29 | Asst Prof      |  70000 |
+|    2 | ishaan     |   35 | Associate Prof | 105000 |
+|    3 | ajhi       |   45 | Professor      | 140000 |
+|    4 | harshal    |   32 | Asst Prof      |  72000 |
+|    5 | chinu      |   40 | Associate Prof | 128000 |
++------+------------+------+----------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> 
