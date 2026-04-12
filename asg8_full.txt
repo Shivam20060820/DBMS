@@ -65,29 +65,17 @@ Query OK, 0 rows affected (0.02 sec)
 
 mysql> delimiter $$
 mysql>
-mysql> drop trigger if exists logfile$$
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
 mysql>
 mysql> create trigger logfile
     -> after insert on drive
     -> for each row
     -> begin
-    -> declare v_time_creation time;
-    -> declare v_time_access time;
-    -> declare v_size int;
-    -> declare v_format varchar(50);
-    ->
-    -> select time_of_creation,time_of_last_access,size_of_file,file_format
-    -> into v_time_creation,v_time_access,v_size,v_format
-    -> from file
-    -> where file_name=new.file_name;
-    ->
     -> insert into log_table(drive_name,directory_name,file_name,
     -> time_of_creation,time_of_last_access,size_of_file,file_format)
-    -> values(new.drive_name,new.directory_name,new.file_name,
-    -> v_time_creation,v_time_access,v_size,v_format);
-    ->
+    -> select new.drive_name,new.directory_name,new.file_name,
+    -> time_of_creation,time_of_last_access,size_of_file,file_format
+    -> from file
+    -> where file_name=new.file_name;
     -> end$$
 Query OK, 0 rows affected (0.01 sec)
 
