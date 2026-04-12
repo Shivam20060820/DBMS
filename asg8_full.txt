@@ -1,0 +1,364 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+Loading personal and system profiles took 1141ms.
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database asg8;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use asg8;
+Database changed
+mysql> create table drive(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table file(
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table log_table(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50),
+    -> log_time timestamp default current_timestamp
+    -> ////
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '////' at line 10
+mysql> create table log_table(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50),
+    -> log_time timestamp default now()
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter $$
+mysql>
+mysql> drop trigger if exists logfile$$
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql>
+mysql> create trigger logfile
+    -> after insert on drive
+    -> for each row
+    -> begin
+    -> declare v_time_creation time;
+    -> declare v_time_access time;
+    -> declare v_size int;
+    -> declare v_format varchar(50);
+    ->
+    -> select time_of_creation,time_of_last_access,size_of_file,file_format
+    -> into v_time_creation,v_time_access,v_size,v_format
+    -> from file
+    -> where file_name=new.file_name;
+    ->
+    -> insert into log_table(drive_name,directory_name,file_name,
+    -> time_of_creation,time_of_last_access,size_of_file,file_format)
+    -> values(new.drive_name,new.directory_name,new.file_name,
+    -> v_time_creation,v_time_access,v_size,v_format);
+    ->
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> delimiter ;
+mysql> insert into file values
+    -> ('shivam_doc','09:00:00','10:00:00',100,'txt'),
+    -> ('ishaan_doc','11:00:00','01:00:00',200,'pdf'),
+    -> ('harshal_doc','09:30:00','03:00:00',300,'jpg'),
+    -> ('akhi_doc','02:00:00','04:00:00',150,'doc'),
+    -> ('ved_doc','08:00:00','06:00:00',500,'mp4');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into drive values
+    -> ('c','docs','shivam_doc'),
+    -> ('d','media','harshal_doc'),
+    -> ('e','videos','ved_doc'),
+    -> ('c','reports','ishaan_doc'),
+    -> ('d','office','akhi_doc');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from log_table;
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+| drive_name | directory_name | file_name   | time_of_creation | time_of_last_access | size_of_file | file_format | log_time            |
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+| c          | docs           | shivam_doc  | 09:00:00         | 10:00:00            |          100 | txt         | 2026-04-12 23:37:10 |
+| d          | media          | harshal_doc | 09:30:00         | 03:00:00            |          300 | jpg         | 2026-04-12 23:37:10 |
+| e          | videos         | ved_doc     | 08:00:00         | 06:00:00            |          500 | mp4         | 2026-04-12 23:37:10 |
+| c          | reports        | ishaan_doc  | 11:00:00         | 01:00:00            |          200 | pdf         | 2026-04-12 23:37:10 |
+| d          | office         | akhi_doc    | 02:00:00         | 04:00:00            |          150 | doc         | 2026-04-12 23:37:10 |
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> -- query 1 done
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> create table book(
+    -> isbn varchar(20) primary key,
+    -> title varchar(100),
+    -> soldcopies int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table writing(
+    -> isbn varchar(20),
+    -> name varchar(100),
+    -> foreign key(isbn) references book(isbn)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table author(
+    -> name varchar(100) primary key,
+    -> soldcopies int
+    -> );//////
+Query OK, 0 rows affected (0.02 sec)
+
+    -> drop table author;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '//////
+drop table author' at line 1
+mysql> drop table author;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> drop table book;
+ERROR 3730 (HY000): Cannot drop table 'book' referenced by a foreign key constraint 'writing_ibfk_1' on table 'writing'.
+mysql> drop table writing;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> drop table book;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table book(
+    -> isbn int primary key,
+    -> title varchar(100),
+    -> soldcopies int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table author(
+    -> name varchar(100),
+    -> soldcopies int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table writing(
+    -> isbn int,
+    -> name varchar(100),
+    -> foreign key(isbn) references book(isbn)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into book values
+    -> (1,'dbms',100),
+    -> (2,'os',200),
+    -> (3,'java',150),
+    -> (4,'python',300),
+    -> (5,'cn',250);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into author values
+    -> ('shivam',100),
+    -> ('ishaan',200),
+    -> ('harshal',150),
+    -> ('akhi',300),
+    -> ('ved',250);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into writing values
+    -> (1,'shivam'),
+    -> (2,'ishaan'),
+    -> (3,'harshal'),
+    -> (4,'akhi'),
+    -> (5,'ved');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> delimiter //
+mysql> create trigger update_book_sold
+    -> after update on book
+    -> for each row
+    -> begin
+    ->
+    -> update author a
+    -> join writing w on a.name=w.name
+    -> set a.soldcopies=new.soldcopies;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table update_book_sold;
+    -> //
+ERROR 1051 (42S02): Unknown table 'asg8.update_book_sold'
+mysql> drop trigger update_book_sold;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create trigger update_book_sold
+    -> after update on book
+    -> for each row
+    -> begin
+    ->
+    -> update author a
+    -> join writing w on a.name=w.name
+    -> set a.soldcopies=new.soldcopies
+    -> where w.isbn=new.isbn;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> select * from book;
++------+--------+------------+
+| isbn | title  | soldcopies |
++------+--------+------------+
+|    1 | dbms   |        100 |
+|    2 | os     |        200 |
+|    3 | java   |        150 |
+|    4 | python |        300 |
+|    5 | cn     |        250 |
++------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from writing;
++------+---------+
+| isbn | name    |
++------+---------+
+|    1 | shivam  |
+|    2 | ishaan  |
+|    3 | harshal |
+|    4 | akhi    |
+|    5 | ved     |
++------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from author;
++---------+------------+
+| name    | soldcopies |
++---------+------------+
+| shivam  |        100 |
+| ishaan  |        200 |
+| harshal |        150 |
+| akhi    |        300 |
+| ved     |        250 |
++---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update book set soldcopies=180 where isbn=1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from author;
++---------+------------+
+| name    | soldcopies |
++---------+------------+
+| shivam  |        180 |
+| ishaan  |        200 |
+| harshal |        150 |
+| akhi    |        300 |
+| ved     |        250 |
++---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select 8
+    -> ;
++---+
+| 8 |
++---+
+| 8 |
++---+
+1 row in set (0.00 sec)
+
+mysql> select * from book;
++------+--------+------------+
+| isbn | title  | soldcopies |
++------+--------+------------+
+|    1 | dbms   |        180 |
+|    2 | os     |        200 |
+|    3 | java   |        150 |
+|    4 | python |        300 |
+|    5 | cn     |        250 |
++------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create trigger insert_writing
+    -> after insert on writing
+    -> for each row
+    -> begin
+    ->
+    -> update author
+    -> set soldcopies=(
+    -> select soldcopies from book where isbn=new.isbn
+    -> )
+    -> where name=new.name;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql> delimiter ;
+mysql> insert into writing values(2,'shivam');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from author;
++---------+------------+
+| name    | soldcopies |
++---------+------------+
+| shivam  |        200 |
+| ishaan  |        200 |
+| harshal |        150 |
+| akhi    |        300 |
+| ved     |        250 |
++---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from writing;
++------+---------+
+| isbn | name    |
++------+---------+
+|    1 | shivam  |
+|    2 | ishaan  |
+|    3 | harshal |
+|    4 | akhi    |
+|    5 | ved     |
+|    2 | shivam  |
++------+---------+
+6 rows in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,57 @@
+mysql> create table emp2(e_no int,first_name varchar(20),age int,grade varchar(30),sal int);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into emp2(e_no, first_name, age, grade, sal) values
+    -> (1, 'shivam', 29, 'Asst Prof', 60000),
+    -> (2, 'ishaan', 35, 'Associate Prof', 85000),
+    -> (3, 'ajhi', 45, 'Professor', 110000),
+    -> (4, 'harshal', 32, 'Asst Prof', 62000),
+    -> (5, 'chinu', 40, 'Associate Prof', 88000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> delimiter //
+mysql> create procedure giveraise_condn_grade()
+    -> begin
+    -> declare done int default 0;
+    -> declare cur_e_no int;
+    -> declare cur_grade varchar(50);
+    -> declare emprec cursor for select e_no, grade from emp2 ;
+    -> declare continue handler for not found set done = 1;
+    -> open emprec;
+    -> repeat
+    -> fetch emprec into cur_e_no,cur_grade;
+    -> if cur_grade = 'Asst Prof' then
+    -> update emp2
+    -> set sal=sal+10000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Associate Prof' then
+    -> update emp2
+    -> set sal=sal+20000
+    -> where e_no=cur_e_no;
+    -> elseif cur_grade='Professor' then
+    -> update emp2
+    -> set sal=sal+30000
+    -> where e_no=cur_e_no;
+    -> end if;
+    -> until done
+    -> end repeat;
+    -> close emprec;
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call giveraise_condn_grade();
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from emp2;
++------+------------+------+----------------+--------+
+| e_no | first_name | age  | grade          | sal    |
++------+------------+------+----------------+--------+
+|    1 | shivam     |   29 | Asst Prof      |  70000 |
+|    2 | ishaan     |   35 | Associate Prof | 105000 |
+|    3 | ajhi       |   45 | Professor      | 140000 |
+|    4 | harshal    |   32 | Asst Prof      |  72000 |
+|    5 | chinu      |   40 | Associate Prof | 128000 |
++------+------------+------+----------------+--------+
+5 rows in set (0.00 sec)

@@ -1,0 +1,128 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+Loading personal and system profiles took 1141ms.
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database asg8;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use asg8;
+Database changed
+mysql> create table drive(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table file(
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table log_table(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50),
+    -> log_time timestamp default current_timestamp
+    -> ////
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '////' at line 10
+mysql> create table log_table(
+    -> drive_name varchar(100),
+    -> directory_name varchar(100),
+    -> file_name varchar(100),
+    -> time_of_creation time,
+    -> time_of_last_access time,
+    -> size_of_file int,
+    -> file_format varchar(50),
+    -> log_time timestamp default now()
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter $$
+mysql>
+mysql> drop trigger if exists logfile$$
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql>
+mysql> create trigger logfile
+    -> after insert on drive
+    -> for each row
+    -> begin
+    -> declare v_time_creation time;
+    -> declare v_time_access time;
+    -> declare v_size int;
+    -> declare v_format varchar(50);
+    ->
+    -> select time_of_creation,time_of_last_access,size_of_file,file_format
+    -> into v_time_creation,v_time_access,v_size,v_format
+    -> from file
+    -> where file_name=new.file_name;
+    ->
+    -> insert into log_table(drive_name,directory_name,file_name,
+    -> time_of_creation,time_of_last_access,size_of_file,file_format)
+    -> values(new.drive_name,new.directory_name,new.file_name,
+    -> v_time_creation,v_time_access,v_size,v_format);
+    ->
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> delimiter ;
+mysql> insert into file values
+    -> ('shivam_doc','09:00:00','10:00:00',100,'txt'),
+    -> ('ishaan_doc','11:00:00','01:00:00',200,'pdf'),
+    -> ('harshal_doc','09:30:00','03:00:00',300,'jpg'),
+    -> ('akhi_doc','02:00:00','04:00:00',150,'doc'),
+    -> ('ved_doc','08:00:00','06:00:00',500,'mp4');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into drive values
+    -> ('c','docs','shivam_doc'),
+    -> ('d','media','harshal_doc'),
+    -> ('e','videos','ved_doc'),
+    -> ('c','reports','ishaan_doc'),
+    -> ('d','office','akhi_doc');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from log_table;
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+| drive_name | directory_name | file_name   | time_of_creation | time_of_last_access | size_of_file | file_format | log_time            |
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+| c          | docs           | shivam_doc  | 09:00:00         | 10:00:00            |          100 | txt         | 2026-04-12 23:37:10 |
+| d          | media          | harshal_doc | 09:30:00         | 03:00:00            |          300 | jpg         | 2026-04-12 23:37:10 |
+| e          | videos         | ved_doc     | 08:00:00         | 06:00:00            |          500 | mp4         | 2026-04-12 23:37:10 |
+| c          | reports        | ishaan_doc  | 11:00:00         | 01:00:00            |          200 | pdf         | 2026-04-12 23:37:10 |
+| d          | office         | akhi_doc    | 02:00:00         | 04:00:00            |          150 | doc         | 2026-04-12 23:37:10 |
++------------+----------------+-------------+------------------+---------------------+--------------+-------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> -- query 1 done
+mysql>
+mysql>

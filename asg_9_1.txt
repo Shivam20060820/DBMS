@@ -1,0 +1,116 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+Loading personal and system profiles took 1207ms.
+PS C:\Users\Shivam Shirsat> mysql -u root -p
+Enter password: ****************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.45 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database asg9;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use asg9;
+Database changed
+mysql> create table employee(
+    -> eno int,
+    -> fname varchar(50),
+    -> age int,
+    -> grade varchar(50),
+    -> salary int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> drop table asg9;
+ERROR 1051 (42S02): Unknown table 'asg9.asg9'
+mysql> drop table employee;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table customer(
+    -> cust_id int,
+    -> principal_amount int,
+    -> rate_of_interest int,
+    -> years int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table templist(
+    -> cust_id int,
+    -> compound_interest float
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into customer values
+    -> (1,10000,10,2),
+    -> (2,20000,8,3),
+    -> (3,15000,12,1),
+    -> (4,25000,9,2),
+    -> (5,30000,7,3);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> delimiter //
+mysql> create procedure calc_ci()
+    -> begin
+    -> declare done int default 0;
+    ->
+    -> declare v_id int;
+    -> declare p int;
+    -> declare r int;
+    -> declare t int;
+    -> declare ci float;
+    ->
+    -> declare cur cursor for
+    -> select cust_id,principal_amount,rate_of_interest,years from customer;
+    ->
+    -> declare continue handler for not found set done=1;
+    ->
+    -> open cur;
+    ->
+    -> read_loop: loop
+    ->
+    -> fetch cur into v_id,p,r,t;
+    ->
+    -> if done=1 then
+    -> leave read_loop;
+    -> end if;
+    ->
+    -> set ci = p * pow((1 + r/100), t);
+    ->
+    -> insert into templist values(v_id,ci);
+    ->
+    -> end loop;
+    ->
+    -> close cur;
+    ->
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call calc_ci();
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from templist;
++---------+-------------------+
+| cust_id | compound_interest |
++---------+-------------------+
+|       1 |             12100 |
+|       2 |           25194.2 |
+|       3 |             16800 |
+|       4 |           29702.5 |
+|       5 |           36751.3 |
++---------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql>
