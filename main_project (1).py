@@ -4,8 +4,8 @@ import mysql.connector
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="#Gamerforlife123",
-    database="dbms_project1"
+    password="#pass",
+    database="db"
 )
 
 cursor = conn.cursor()
@@ -23,19 +23,19 @@ while True:
 
     choice = int(input("Enter your choice: "))
 
-    # 🔹 1. SHOW TABLES
+    #  1. SHOW TABLES
     if choice == 1:
         cursor.execute("SHOW TABLES")
         for table in cursor.fetchall():
             print(table[0])
 
-    # 🔹 2. VIEW CRIMINALS
+    #  2. VIEW CRIMINALS
     elif choice == 2:
         cursor.execute("SELECT * FROM criminal")
         for row in cursor.fetchall():
             print(row)
 
-    # 🔹 3. SEARCH CRIMINAL
+    #  3. SEARCH CRIMINAL
     elif choice == 3:
         cid = int(input("Enter Criminal ID: "))
 
@@ -45,15 +45,15 @@ while True:
         if result:
             print("\n🔍 Found:", result)
         else:
-            print("❌ Not found!")
+            print(" Not found!")
 
-    # 🔹 4. VIEW (CASEOVERVIEW)
+    #  4. VIEW (CASEOVERVIEW)
     elif choice == 4:
         cursor.execute("SELECT * FROM caseoverview")
         for row in cursor.fetchall():
             print(row)
 
-    # 🔹 5. FIND CRIMINAL BY FIR ID
+    #  5. FIND CRIMINAL BY FIR ID
     elif choice == 5:
         fir_id = int(input("Enter FIR ID: "))
 
@@ -71,13 +71,13 @@ while True:
             for row in result:
                 print(row)
         else:
-            print("❌ No record found!")
+            print(" No record found!")
 
-    # 🔹 6. SMART INSERT (MAIN PART 🔥)
+    #  6. SMART INSERT (MAIN PART)
     elif choice == 6:
-        print("\n🚨 Enter Full Case Details")
+        print("\nEnter Full Case Details")
 
-        # 🔹 POLICE STATION
+        #  POLICE STATION
         ps_choice = input("Use existing Police Station? (y/n): ")
 
         if ps_choice.lower() == 'y':
@@ -85,7 +85,7 @@ while True:
 
             cursor.execute("SELECT * FROM police_station WHERE ps_id = %s", (ps_id,))
             if not cursor.fetchone():
-                print("❌ Invalid PS ID!")
+                print("Invalid PS ID!")
                 continue
 
         else:
@@ -105,7 +105,7 @@ while True:
                 (ps_id, ps_name, district, state, contact)
             )
 
-        # 🔹 CRIMINAL
+        # CRIMINAL
         cr_choice = input("Use existing Criminal? (y/n): ")
 
         if cr_choice.lower() == 'y':
@@ -113,7 +113,7 @@ while True:
 
             cursor.execute("SELECT * FROM criminal WHERE cri_id = %s", (cid,))
             if not cursor.fetchone():
-                print("❌ Invalid Criminal ID!")
+                print("Invalid Criminal ID!")
                 continue
 
         else:
@@ -130,7 +130,7 @@ while True:
                 (cid, name, gender, dob, status, mark, address)
             )
 
-        # 🔹 FIR
+        # FIR
         fir_id = int(input("FIR ID: "))
         fir_no = input("FIR No: ")
         fir_date = input("FIR Date: ")
@@ -139,7 +139,7 @@ while True:
 
         cursor.execute("SELECT * FROM fir WHERE fir_id = %s", (fir_id,))
         if cursor.fetchone():
-            print("❌ FIR ID already exists!")
+            print("FIR ID already exists!")
             continue
 
         cursor.execute(
@@ -147,7 +147,7 @@ while True:
             (fir_id, fir_no, fir_date, ps_id, cid, crime_type, desc)
         )
 
-        # 🔹 CASE DETAILS (FIXED 🔥)
+        # 🔹 CASE DETAILS
         case_id = int(input("Case ID: "))
         case_status = input("Case Status: ")
         filing_date = input("Filing Date: ")
@@ -158,16 +158,16 @@ while True:
         )
 
         conn.commit()
-        print("✅ Full Case Added Successfully!")
+        print("Full Case Added Successfully!")
 
     # 🔹 EXIT
     elif choice == 7:
-        print("👋 Exiting...")
+        print("Exiting...")
         break
 
     else:
-        print("❌ Invalid choice!")
+        print("Invalid choice!")
 
-# 🔒 CLOSE
+# CLOSE
 cursor.close()
 conn.close()
